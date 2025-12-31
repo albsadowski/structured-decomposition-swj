@@ -1,0 +1,196 @@
+@prefix : <http://example.org/eligibility-nli#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix swrl: <http://www.w3.org/2003/11/swrl#> .
+@prefix sd: <http://example.org/structured-decomposition#> .
+
+# =============================================================================
+# Clinical Trial Eligibility NLI Ontology - WITH Complementary Predicates
+# =============================================================================
+# This version includes complementary (negative) predicates that force the LLM
+# to make explicit determinations for both positive and negative conditions.
+#
+# Under OWL's open-world assumption, missing assertions are treated as unknown.
+# Complementary predicates convert this to closed-world-style reasoning by
+# requiring explicit assertion of either the positive or negative form.
+#
+# Example: The LLM must determine EITHER StatementFollowsFromPremise(s,p) OR 
+# StatementDoesNotFollowFromPremise(s,p), rather than only asserting the
+# positive when confident it's true.
+# =============================================================================
+
+:EligibilityNLIOntology a owl:Ontology ;
+    rdfs:comment "Clinical trial eligibility NLI ontology with complementary predicates for OWA handling" .
+
+# =============================================================================
+# Task Metadata (sd: namespace - for LLM prompting, not reasoning)
+# =============================================================================
+
+:EligibilityNLITask a sd:Task ;
+    sd:domain "medical" ;
+    sd:subdomain "clinical_trials" ;
+    sd:taskName "eligibility_nli" ;
+    sd:persona "clinical research coordinator verifying eligibility statements" ;
+    sd:question "Does the statement accurately follow from the eligibility criteria?" ;
+    sd:domainKnowledge """Clinical trial eligibility is determined by inclusion criteria (requirements to participate) 
+and exclusion criteria (conditions that disqualify). A statement entails if it logically follows from the criteria; 
+it contradicts if it conflicts with the criteria.""" ;
+    sd:targetClass :Entailment ;
+    sd:targetTerm "s" .
+
+# =============================================================================
+# Entity Specifications (sd: namespace - guides entity extraction)
+# =============================================================================
+
+:entity_s a sd:EntitySpec ;
+    sd:entityName "s" ;
+    sd:entityDescription "A statement making a claim about clinical trial eligibility. This is typically a hypothesis or claim that needs to be verified against the eligibility criteria." ;
+    sd:mapsToClass :EligibilityStatement .
+
+:entity_p a sd:EntitySpec ;
+    sd:entityName "p" ;
+    sd:entityDescription "The premise containing eligibility criteria (inclusion and/or exclusion) from a clinical trial protocol." ;
+    sd:mapsToClass :EligibilityCriteria .
+
+# =============================================================================
+# Assertion Specifications - POSITIVE Predicates
+# =============================================================================
+
+:assert_IsEligibilityStatement a sd:AssertionSpec ;
+    sd:assertionName "IsEligibilityStatement" ;
+    sd:assertionEntities "s" ;
+    sd:assertionDescription "True if 's' makes a claim about clinical trial eligibility (who can or cannot participate)." ;
+    sd:mapsToClass :EligibilityStatement ;
+    sd:hasComplement :assert_NotEligibilityStatement .
+
+:assert_IsEligibilityCriteria a sd:AssertionSpec ;
+    sd:assertionName "IsEligibilityCriteria" ;
+    sd:assertionEntities "p" ;
+    sd:assertionDescription "True if 'p' contains inclusion and/or exclusion criteria for a clinical trial." ;
+    sd:mapsToClass :EligibilityCriteria ;
+    sd:hasComplement :assert_NotEligibilityCriteria .
+
+:assert_StatementFollowsFromPremise a sd:AssertionSpec ;
+    sd:assertionName "StatementFollowsFromPremise" ;
+    sd:assertionEntities "s, p" ;
+    sd:assertionDescription """True if what statement 's' claims logically follows from premise 'p'. Consider:
+(1) Inclusion criteria define who CAN participate
+(2) Exclusion criteria define who CANNOT participate  
+(3) Synonyms count (e.g., 'claustrophobia' = 'fear of confined spaces')
+(4) Logical implications count (e.g., if inclusion requires N0 or N1 lymph node status, then N2 patients are excluded)
+(5) Negations and contrapositions apply""" ;
+    sd:mapsToProperty :statementFollowsFromPremise ;
+    sd:hasComplement :assert_StatementDoesNotFollowFromPremise .
+
+# =============================================================================
+# Assertion Specifications - COMPLEMENTARY (Negative) Predicates
+# =============================================================================
+
+:assert_NotEligibilityStatement a sd:AssertionSpec ;
+    sd:assertionName "NotEligibilityStatement" ;
+    sd:assertionEntities "s" ;
+    sd:assertionDescription "True if 's' does NOT make a claim about clinical trial eligibility. The statement may be about treatment efficacy, study design, or other non-eligibility matters." ;
+    sd:mapsToClass :NonEligibilityStatement ;
+    sd:complementOf :assert_IsEligibilityStatement .
+
+:assert_NotEligibilityCriteria a sd:AssertionSpec ;
+    sd:assertionName "NotEligibilityCriteria" ;
+    sd:assertionEntities "p" ;
+    sd:assertionDescription "True if 'p' does NOT contain eligibility criteria. The premise may describe study procedures, endpoints, or other non-criteria information." ;
+    sd:mapsToClass :NonEligibilityCriteria ;
+    sd:complementOf :assert_IsEligibilityCriteria .
+
+:assert_StatementDoesNotFollowFromPremise a sd:AssertionSpec ;
+    sd:assertionName "StatementDoesNotFollowFromPremise" ;
+    sd:assertionEntities "s, p" ;
+    sd:assertionDescription """True if what statement 's' claims does NOT logically follow from premise 'p'. This includes:
+(1) CONTRADICTION: The statement directly conflicts with the criteria (e.g., claiming eligible when criteria exclude)
+(2) NEUTRAL: The statement makes claims not addressed by the criteria (e.g., criteria don't mention the condition)
+(3) INSUFFICIENT INFORMATION: The criteria don't provide enough information to determine the claim
+(4) LOGICAL ERROR: The statement draws an incorrect inference from the criteria""" ;
+    sd:mapsToProperty :statementDoesNotFollowFromPremise ;
+    sd:complementOf :assert_StatementFollowsFromPremise .
+
+# =============================================================================
+# OWL Classes (TBox)
+# =============================================================================
+
+:EligibilityStatement a owl:Class ;
+    owl:disjointWith :NonEligibilityStatement ;
+    rdfs:comment "A statement making a claim about clinical trial eligibility" .
+
+:NonEligibilityStatement a owl:Class ;
+    owl:disjointWith :EligibilityStatement ;
+    rdfs:comment "A statement that does not make a claim about clinical trial eligibility" .
+
+:EligibilityCriteria a owl:Class ;
+    owl:disjointWith :NonEligibilityCriteria ;
+    rdfs:comment "Inclusion and/or exclusion criteria from a clinical trial protocol" .
+
+:NonEligibilityCriteria a owl:Class ;
+    owl:disjointWith :EligibilityCriteria ;
+    rdfs:comment "Content that is not eligibility criteria" .
+
+:Entailment a owl:Class ;
+    rdfs:subClassOf :EligibilityStatement ;
+    owl:disjointWith :Contradiction ;
+    rdfs:comment "A statement that logically follows from the eligibility criteria" .
+
+:Contradiction a owl:Class ;
+    rdfs:subClassOf :EligibilityStatement ;
+    owl:disjointWith :Entailment ;
+    rdfs:comment "A statement that conflicts with the eligibility criteria" .
+
+# =============================================================================
+# OWL Object Properties - Positive
+# =============================================================================
+
+:statementFollowsFromPremise a owl:ObjectProperty ;
+    owl:propertyDisjointWith :statementDoesNotFollowFromPremise ;
+    rdfs:comment "Indicates the statement logically follows from the eligibility criteria" .
+
+# =============================================================================
+# OWL Object Properties - Complementary (Negative)
+# =============================================================================
+
+:statementDoesNotFollowFromPremise a owl:ObjectProperty ;
+    owl:propertyDisjointWith :statementFollowsFromPremise ;
+    rdfs:comment "Indicates the statement does not logically follow from the eligibility criteria" .
+
+# =============================================================================
+# SWRL Rule
+# =============================================================================
+# The rule fires on positive conditions only. Complementary predicates work
+# by forcing explicit negative assertions that block the positive assertions
+# (via property disjointness), thereby preventing rule satisfaction.
+#
+# EligibilityStatement(?s) ∧ EligibilityCriteria(?p) 
+#   ∧ statementFollowsFromPremise(?s, ?p) → Entailment(?s)
+# =============================================================================
+
+:EntailmentRule a swrl:Imp ;
+    rdfs:comment "Entailment classification rule for eligibility statements" ;
+    swrl:body [ 
+        a swrl:AtomList ; 
+        rdf:first [ a swrl:ClassAtom ; swrl:classPredicate :EligibilityStatement ; swrl:argument1 :var_s ] ;
+        rdf:rest [ 
+            a swrl:AtomList ; 
+            rdf:first [ a swrl:ClassAtom ; swrl:classPredicate :EligibilityCriteria ; swrl:argument1 :var_p ] ;
+            rdf:rest [ 
+                a swrl:AtomList ; 
+                rdf:first [ a swrl:IndividualPropertyAtom ; swrl:propertyPredicate :statementFollowsFromPremise ; swrl:argument1 :var_s ; swrl:argument2 :var_p ] ;
+                rdf:rest rdf:nil 
+            ]
+        ]
+    ] ;
+    swrl:head [ 
+        a swrl:AtomList ; 
+        rdf:first [ a swrl:ClassAtom ; swrl:classPredicate :Entailment ; swrl:argument1 :var_s ] ; 
+        rdf:rest rdf:nil 
+    ] .
+
+# SWRL Variables
+:var_s a swrl:Variable .
+:var_p a swrl:Variable .

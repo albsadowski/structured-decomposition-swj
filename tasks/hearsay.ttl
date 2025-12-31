@@ -1,0 +1,249 @@
+@prefix : <http://example.org/hearsay#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix swrl: <http://www.w3.org/2003/11/swrl#> .
+@prefix sd: <http://example.org/structured-decomposition#> .
+
+# =============================================================================
+# Hearsay Ontology - WITH Complementary Predicates
+# =============================================================================
+# This version includes complementary (negative) predicates that force the LLM
+# to make explicit determinations for both positive and negative conditions.
+#
+# Under OWL's open-world assumption, missing assertions are treated as unknown.
+# Complementary predicates convert this to closed-world-style reasoning by
+# requiring explicit assertion of either the positive or negative form.
+#
+# Example: The LLM must determine EITHER IsOutOfCourt(s) OR IsInCourt(s),
+# rather than only asserting IsOutOfCourt when confident it's true.
+# =============================================================================
+
+:HearsayOntology a owl:Ontology ;
+    rdfs:comment "Hearsay determination ontology with complementary predicates for OWA handling" .
+
+# =============================================================================
+# Task Metadata (sd: namespace - for LLM prompting, not reasoning)
+# =============================================================================
+
+:HearsayTask a sd:Task ;
+    sd:domain "legal" ;
+    sd:subdomain "evidence" ;
+    sd:taskName "hearsay" ;
+    sd:persona "legal assistant helping to identify hearsay" ;
+    sd:question "Is there hearsay?" ;
+    sd:domainKnowledge "Hearsay is an out-of-court statement introduced to prove the truth of the matter asserted." ;
+    sd:targetClass :Hearsay ;
+    sd:targetTerm "s" .
+
+# =============================================================================
+# Entity Specifications (sd: namespace - guides entity extraction)
+# =============================================================================
+
+:entity_s a sd:EntitySpec ;
+    sd:entityName "s" ;
+    sd:entityDescription "A communicative act (verbal, written, or non-verbal conduct) intended to assert a fact. Detectable by explicit claims (e.g., 'Alex said...'), written documents, or purposeful actions (e.g., nodding)." ;
+    sd:mapsToClass :Statement .
+
+:entity_l a sd:EntitySpec ;
+    sd:entityName "l" ;
+    sd:entityDescription "The specific disputed matter in the case. Detectable by phrases like 'the issue of whether...' or explicit descriptions of the trial's focus (e.g., 'whether the brakes were faulty')." ;
+    sd:mapsToClass :LegalIssue .
+
+:entity_a a sd:EntitySpec ;
+    sd:entityName "a" ;
+    sd:entityDescription "The factual claim conveyed by the statement. Detectable by extracting the content of the statement and rephrasing it as a proposition (e.g., 'I love soccer' → 'Alex loves soccer')." ;
+    sd:mapsToClass :Assertion .
+
+# =============================================================================
+# Assertion Specifications - POSITIVE Predicates
+# =============================================================================
+
+:assert_IsStatement a sd:AssertionSpec ;
+    sd:assertionName "IsStatement" ;
+    sd:assertionEntities "s" ;
+    sd:assertionDescription "True if 's' is a communicative act (verbal, written, or conduct) intended to assert a fact. Look for explicit claims or implied messages." ;
+    sd:mapsToClass :Statement ;
+    sd:hasComplement :assert_NotStatement .
+
+:assert_IsOutOfCourt a sd:AssertionSpec ;
+    sd:assertionName "IsOutOfCourt" ;
+    sd:assertionEntities "s" ;
+    sd:assertionDescription "True if 's' was made outside the current trial/hearing. Detect via contextual cues (e.g., 'told his brother', 'said at the scene')." ;
+    sd:mapsToClass :OutOfCourtStatement ;
+    sd:hasComplement :assert_IsInCourt .
+
+:assert_HasAssertion a sd:AssertionSpec ;
+    sd:assertionName "HasAssertion" ;
+    sd:assertionEntities "s, a" ;
+    sd:assertionDescription "True if 's' contains the assertion 'a'. Parse the statement's content to identify its factual claim (e.g., 'I was attacked' → assertion = 'Declarant was attacked')." ;
+    sd:mapsToProperty :hasAssertion ;
+    sd:hasComplement :assert_NoAssertion .
+
+:assert_IntroducedForLegalIssue a sd:AssertionSpec ;
+    sd:assertionName "IntroducedForLegalIssue" ;
+    sd:assertionEntities "s, l" ;
+    sd:assertionDescription "True if 's' is introduced as evidence to address the legal issue 'l'. Detect links between the statement's purpose and the trial's disputed matter." ;
+    sd:mapsToProperty :introducedForLegalIssue ;
+    sd:hasComplement :assert_NotIntroducedForLegalIssue .
+
+:assert_ProvesTruthOfAssertion a sd:AssertionSpec ;
+    sd:assertionName "ProvesTruthOfAssertion" ;
+    sd:assertionEntities "s, l" ;
+    sd:assertionDescription "True if s is used to establish the truth of its assertion a for resolving l. Check if a directly supports or negates the legal issue (e.g., a statement about 'faulty brakes' used to prove brake defects)." ;
+    sd:mapsToProperty :provesTruthOfAssertion ;
+    sd:hasComplement :assert_DoesNotProveTruth .
+
+# =============================================================================
+# Assertion Specifications - COMPLEMENTARY (Negative) Predicates
+# =============================================================================
+
+:assert_NotStatement a sd:AssertionSpec ;
+    sd:assertionName "NotStatement" ;
+    sd:assertionEntities "s" ;
+    sd:assertionDescription "True if 's' is NOT a communicative act intended to assert a fact. This includes involuntary utterances, questions without assertive content, or non-communicative actions." ;
+    sd:mapsToClass :NonStatement ;
+    sd:complementOf :assert_IsStatement .
+
+:assert_IsInCourt a sd:AssertionSpec ;
+    sd:assertionName "IsInCourt" ;
+    sd:assertionEntities "s" ;
+    sd:assertionDescription "True if 's' was made during the current trial/hearing (e.g., 'testified in court', 'stated on the stand', 'declared before the jury')." ;
+    sd:mapsToClass :InCourtStatement ;
+    sd:complementOf :assert_IsOutOfCourt .
+
+:assert_NoAssertion a sd:AssertionSpec ;
+    sd:assertionName "NoAssertion" ;
+    sd:assertionEntities "s, a" ;
+    sd:assertionDescription "True if 's' does not contain any factual assertion, or the assertion 'a' cannot be identified. The statement may be a question, command, or expression without propositional content." ;
+    sd:mapsToProperty :hasNoAssertion ;
+    sd:complementOf :assert_HasAssertion .
+
+:assert_NotIntroducedForLegalIssue a sd:AssertionSpec ;
+    sd:assertionName "NotIntroducedForLegalIssue" ;
+    sd:assertionEntities "s, l" ;
+    sd:assertionDescription "True if 's' is NOT introduced to address the legal issue 'l'. The statement may be irrelevant, used for a different purpose, or introduced for a collateral matter." ;
+    sd:mapsToProperty :notIntroducedForLegalIssue ;
+    sd:complementOf :assert_IntroducedForLegalIssue .
+
+:assert_DoesNotProveTruth a sd:AssertionSpec ;
+    sd:assertionName "DoesNotProveTruth" ;
+    sd:assertionEntities "s, l" ;
+    sd:assertionDescription "True if 's' is NOT used to establish the truth of its assertion. Non-hearsay purposes include: showing effect on listener, proving notice, demonstrating state of mind, impeachment, or verbal acts." ;
+    sd:mapsToProperty :doesNotProveTruthOfAssertion ;
+    sd:complementOf :assert_ProvesTruthOfAssertion .
+
+# =============================================================================
+# OWL Classes (TBox)
+# =============================================================================
+
+:Statement a owl:Class ;
+    rdfs:comment "A communicative act intended to assert a fact" .
+
+:NonStatement a owl:Class ;
+    owl:disjointWith :Statement ;
+    rdfs:comment "A communicative act that is not intended to assert a fact" .
+
+:OutOfCourtStatement a owl:Class ;
+    owl:disjointWith :InCourtStatement ;
+    rdfs:comment "A statement made outside the current trial or hearing" .
+
+:InCourtStatement a owl:Class ;
+    owl:disjointWith :OutOfCourtStatement ;
+    rdfs:comment "A statement made during the current trial or hearing" .
+
+:Hearsay a owl:Class ;
+    rdfs:subClassOf :OutOfCourtStatement ;
+    rdfs:comment "An out-of-court statement introduced to prove the truth of the matter asserted" .
+
+:LegalIssue a owl:Class ;
+    rdfs:comment "A disputed matter in a legal case" .
+
+:Assertion a owl:Class ;
+    rdfs:comment "A factual claim conveyed by a statement" .
+
+# =============================================================================
+# OWL Object Properties - Positive
+# =============================================================================
+
+:hasAssertion a owl:ObjectProperty ;
+    rdfs:range :Assertion ;
+    owl:propertyDisjointWith :hasNoAssertion ;
+    rdfs:comment "Links a statement to the factual claim it conveys" .
+
+:introducedForLegalIssue a owl:ObjectProperty ;
+    rdfs:range :LegalIssue ;
+    owl:propertyDisjointWith :notIntroducedForLegalIssue ;
+    rdfs:comment "Links a statement to the legal issue it is introduced to address" .
+
+:provesTruthOfAssertion a owl:ObjectProperty ;
+    rdfs:range :LegalIssue ;
+    owl:propertyDisjointWith :doesNotProveTruthOfAssertion ;
+    rdfs:comment "Indicates the statement is used to establish truth of its assertion for the legal issue" .
+
+# =============================================================================
+# OWL Object Properties - Complementary (Negative)
+# =============================================================================
+
+:hasNoAssertion a owl:ObjectProperty ;
+    rdfs:range :Assertion ;
+    owl:propertyDisjointWith :hasAssertion ;
+    rdfs:comment "Indicates the statement does not contain a factual assertion" .
+
+:notIntroducedForLegalIssue a owl:ObjectProperty ;
+    rdfs:range :LegalIssue ;
+    owl:propertyDisjointWith :introducedForLegalIssue ;
+    rdfs:comment "Indicates the statement is not introduced to address the legal issue" .
+
+:doesNotProveTruthOfAssertion a owl:ObjectProperty ;
+    rdfs:range :LegalIssue ;
+    owl:propertyDisjointWith :provesTruthOfAssertion ;
+    rdfs:comment "Indicates the statement is not used to establish truth of its assertion" .
+
+# =============================================================================
+# SWRL Rule
+# =============================================================================
+# The rule itself remains unchanged - it fires on positive conditions.
+# Complementary predicates work by forcing explicit negative assertions,
+# which prevent the positive assertions from being made (due to disjointness),
+# thereby blocking rule satisfaction.
+#
+# Statement(?s) ∧ OutOfCourtStatement(?s) ∧ hasAssertion(?s, ?a) 
+#   ∧ introducedForLegalIssue(?s, ?l) ∧ provesTruthOfAssertion(?s, ?l) 
+#   → Hearsay(?s)
+# =============================================================================
+
+:HearsayRule a swrl:Imp ;
+    rdfs:comment "Hearsay classification rule per Federal Rules of Evidence Rule 801" ;
+    swrl:body [ 
+        a swrl:AtomList ; 
+        rdf:first [ a swrl:ClassAtom ; swrl:classPredicate :Statement ; swrl:argument1 :var_s ] ;
+        rdf:rest [ 
+            a swrl:AtomList ; 
+            rdf:first [ a swrl:ClassAtom ; swrl:classPredicate :OutOfCourtStatement ; swrl:argument1 :var_s ] ;
+            rdf:rest [ 
+                a swrl:AtomList ; 
+                rdf:first [ a swrl:IndividualPropertyAtom ; swrl:propertyPredicate :hasAssertion ; swrl:argument1 :var_s ; swrl:argument2 :var_a ] ;
+                rdf:rest [ 
+                    a swrl:AtomList ; 
+                    rdf:first [ a swrl:IndividualPropertyAtom ; swrl:propertyPredicate :introducedForLegalIssue ; swrl:argument1 :var_s ; swrl:argument2 :var_l ] ;
+                    rdf:rest [ 
+                        a swrl:AtomList ; 
+                        rdf:first [ a swrl:IndividualPropertyAtom ; swrl:propertyPredicate :provesTruthOfAssertion ; swrl:argument1 :var_s ; swrl:argument2 :var_l ] ;
+                        rdf:rest rdf:nil 
+                    ]
+                ]
+            ]
+        ]
+    ] ;
+    swrl:head [ 
+        a swrl:AtomList ; 
+        rdf:first [ a swrl:ClassAtom ; swrl:classPredicate :Hearsay ; swrl:argument1 :var_s ] ; 
+        rdf:rest rdf:nil 
+    ] .
+
+# SWRL Variables
+:var_s a swrl:Variable .
+:var_l a swrl:Variable .
+:var_a a swrl:Variable .

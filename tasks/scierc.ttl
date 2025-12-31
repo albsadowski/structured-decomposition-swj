@@ -1,0 +1,202 @@
+@prefix : <http://example.org/method-application#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix swrl: <http://www.w3.org/2003/11/swrl#> .
+@prefix sd: <http://example.org/structured-decomposition#> .
+
+# =============================================================================
+# Method Application Ontology - WITH Complementary Predicates
+# =============================================================================
+# This version includes complementary (negative) predicates that force the LLM
+# to make explicit determinations for both positive and negative conditions.
+#
+# Under OWL's open-world assumption, missing assertions are treated as unknown.
+# Complementary predicates convert this to closed-world-style reasoning by
+# requiring explicit assertion of either the positive or negative form.
+#
+# Example: The LLM must determine EITHER FunctionalConnection(m,t) OR 
+# NoFunctionalConnection(m,t), rather than only asserting the positive
+# when confident it's true.
+# =============================================================================
+
+:MethodApplicationOntology a owl:Ontology ;
+    rdfs:comment "Method application ontology with complementary predicates for OWA handling" .
+
+# =============================================================================
+# Task Metadata (sd: namespace - for LLM prompting, not reasoning)
+# =============================================================================
+
+:MethodApplicationTask a sd:Task ;
+    sd:domain "science" ;
+    sd:subdomain "NLP_AI_research" ;
+    sd:taskName "method_application" ;
+    sd:persona "research assistant identifying usage relationships in scientific text" ;
+    sd:question "Determine if the text explicitly states that the candidate method is being used to perform, solve, or improve the candidate task." ;
+    sd:domainKnowledge """Analyze the relationship between the entity marked in [[ double brackets ]] (Candidate Method)
+and the entity marked in << angle brackets >> (Candidate Task).
+
+Rules for 'No':
+- Answer No if the two entities are merely listed together (Conjunction).
+- Answer No if the Method is just a component or feature of the Task (Part-Of/Feature-Of).
+- Answer No if the relationship is a comparison (Compare).
+- Answer No if the text describes a hierarchy (e.g., X is a type of Y).""" ;
+    sd:targetClass :MethodApplication ;
+    sd:targetTerm "m" .
+
+# =============================================================================
+# Entity Specifications (sd: namespace - guides entity extraction)
+# =============================================================================
+
+:entity_m a sd:EntitySpec ;
+    sd:entityName "m" ;
+    sd:entityDescription "The source entity marked in [[ double brackets ]]. Extract the exact text between [[ and ]]." ;
+    sd:mapsToClass :Method .
+
+:entity_t a sd:EntitySpec ;
+    sd:entityName "t" ;
+    sd:entityDescription "The target entity marked in << angle brackets >>. Extract the exact text between << and >>." ;
+    sd:mapsToClass :ScientificTask .
+
+# =============================================================================
+# Assertion Specifications - POSITIVE Predicates
+# =============================================================================
+
+:assert_FunctionalConnection a sd:AssertionSpec ;
+    sd:assertionName "FunctionalConnection" ;
+    sd:assertionEntities "m, t" ;
+    sd:assertionDescription """True if the text indicates m serves a FUNCTION related to t. Accept any of these patterns:
+1. DIRECT USAGE: 'm used for t', 'm applied to t', 'm to perform t', 'm enables t'
+2. PURPOSE: 'm for t', 'm for the task of t', 'm as a tool for t', 'm designed for t'
+3. APPLICATION DOMAIN: 'm with applications in t', 'm in domain of t', 'application of m to t'
+4. REVERSED CONSTRUCTIONS: 't based on m', 't using m', 't trained on m', 't parsed with m'
+5. IMPLICIT: m appears as technique/method and t as goal/task with purposive connection""" ;
+    sd:mapsToProperty :functionallyConnectsTo ;
+    sd:hasComplement :assert_NoFunctionalConnection .
+
+:assert_NotExcludedRelationType a sd:AssertionSpec ;
+    sd:assertionName "NotExcludedRelationType" ;
+    sd:assertionEntities "m, t" ;
+    sd:assertionDescription """True if the relationship between m and t is a VALID application relationship (NOT one of the excluded types). The relationship should indicate genuine functional use, not merely:
+- Conjunction (listed together)
+- Comparison (contrasted with each other)
+- Part-of (component relationship)
+- Hyponymy (taxonomic relationship)
+- Feature-of (attribute relationship)""" ;
+    sd:mapsToProperty :hasValidRelationTypeWith ;
+    sd:hasComplement :assert_IsExcludedRelationType .
+
+# =============================================================================
+# Assertion Specifications - COMPLEMENTARY (Negative) Predicates
+# =============================================================================
+
+:assert_NoFunctionalConnection a sd:AssertionSpec ;
+    sd:assertionName "NoFunctionalConnection" ;
+    sd:assertionEntities "m, t" ;
+    sd:assertionDescription """True if there is NO functional connection between m and t. The entities merely co-occur in the text without any usage, application, or purposive relationship. Signs of no functional connection:
+- Entities appear in separate clauses without linking verbs
+- Entities are mentioned in different contexts
+- No usage verbs ('used', 'applied', 'enables') connect them
+- No purposive markers ('for', 'to perform') connect them""" ;
+    sd:mapsToProperty :noFunctionalConnectionTo ;
+    sd:complementOf :assert_FunctionalConnection .
+
+:assert_IsExcludedRelationType a sd:AssertionSpec ;
+    sd:assertionName "IsExcludedRelationType" ;
+    sd:assertionEntities "m, t" ;
+    sd:assertionDescription """True if the relationship IS one of the excluded types (not a valid application):
+- CONJUNCTION: 'X and Y', 'both X and Y', comma-separated lists, parallel grammatical roles
+- COMPARISON: 'compared to', 'versus', 'outperforms', 'better than', 'unlike'
+- PART-OF: 'part of', 'component of', 'module in', 'consists of'
+- HYPONYM: 'is a', 'type of', 'kind of', 'such as', 'instance of'
+- FEATURE-OF: 'property of', 'attribute of', 'metric for', 'characteristic of'""" ;
+    sd:mapsToProperty :hasExcludedRelationTypeWith ;
+    sd:complementOf :assert_NotExcludedRelationType .
+
+# =============================================================================
+# OWL Classes (TBox)
+# =============================================================================
+
+:Method a owl:Class ;
+    rdfs:comment "A computational method, technique, or approach" .
+
+:ScientificTask a owl:Class ;
+    owl:disjointWith :Method ;
+    rdfs:comment "A scientific task, problem, or application domain" .
+
+:MethodApplication a owl:Class ;
+    rdfs:subClassOf :Method ;
+    rdfs:comment "A method that is functionally applied to a scientific task" .
+
+# =============================================================================
+# OWL Object Properties - Positive
+# =============================================================================
+
+:functionallyConnectsTo a owl:ObjectProperty ;
+    rdfs:domain :Method ;
+    rdfs:range :ScientificTask ;
+    owl:propertyDisjointWith :noFunctionalConnectionTo ;
+    rdfs:comment "Indicates the method serves a function related to the task" .
+
+:hasValidRelationTypeWith a owl:ObjectProperty ;
+    rdfs:domain :Method ;
+    rdfs:range :ScientificTask ;
+    owl:propertyDisjointWith :hasExcludedRelationTypeWith ;
+    rdfs:comment "Indicates the relationship is a valid application type" .
+
+# =============================================================================
+# OWL Object Properties - Complementary (Negative)
+# =============================================================================
+
+:noFunctionalConnectionTo a owl:ObjectProperty ;
+    rdfs:domain :Method ;
+    rdfs:range :ScientificTask ;
+    owl:propertyDisjointWith :functionallyConnectsTo ;
+    rdfs:comment "Indicates no functional connection exists between method and task" .
+
+:hasExcludedRelationTypeWith a owl:ObjectProperty ;
+    rdfs:domain :Method ;
+    rdfs:range :ScientificTask ;
+    owl:propertyDisjointWith :hasValidRelationTypeWith ;
+    rdfs:comment "Indicates the relationship is an excluded type (conjunction, comparison, etc.)" .
+
+# =============================================================================
+# SWRL Rule
+# =============================================================================
+# The rule fires on positive conditions only. Complementary predicates work
+# by forcing explicit negative assertions that block the positive assertions
+# (via property disjointness), thereby preventing rule satisfaction.
+#
+# Method(?m) ∧ ScientificTask(?t) ∧ functionallyConnectsTo(?m, ?t) 
+#   ∧ hasValidRelationTypeWith(?m, ?t) → MethodApplication(?m)
+# =============================================================================
+
+:MethodApplicationRule a swrl:Imp ;
+    rdfs:comment "Method application classification rule" ;
+    swrl:body [ 
+        a swrl:AtomList ;
+        rdf:first [ a swrl:ClassAtom ; swrl:classPredicate :Method ; swrl:argument1 :var_m ] ;
+        rdf:rest [ 
+            a swrl:AtomList ;
+            rdf:first [ a swrl:ClassAtom ; swrl:classPredicate :ScientificTask ; swrl:argument1 :var_t ] ;
+            rdf:rest [ 
+                a swrl:AtomList ;
+                rdf:first [ a swrl:IndividualPropertyAtom ; swrl:propertyPredicate :functionallyConnectsTo ; swrl:argument1 :var_m ; swrl:argument2 :var_t ] ;
+                rdf:rest [ 
+                    a swrl:AtomList ;
+                    rdf:first [ a swrl:IndividualPropertyAtom ; swrl:propertyPredicate :hasValidRelationTypeWith ; swrl:argument1 :var_m ; swrl:argument2 :var_t ] ;
+                    rdf:rest rdf:nil 
+                ]
+            ]
+        ]
+    ] ;
+    swrl:head [ 
+        a swrl:AtomList ;
+        rdf:first [ a swrl:ClassAtom ; swrl:classPredicate :MethodApplication ; swrl:argument1 :var_m ] ;
+        rdf:rest rdf:nil 
+    ] .
+
+# SWRL Variables
+:var_m a swrl:Variable .
+:var_t a swrl:Variable .

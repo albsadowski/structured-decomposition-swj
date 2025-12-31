@@ -1,0 +1,259 @@
+@prefix : <http://example.org/urti#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix swrl: <http://www.w3.org/2003/11/swrl#> .
+@prefix sd: <http://example.org/structured-decomposition#> .
+
+:URTIOntology a owl:Ontology ;
+    rdfs:label "URTI Diagnosis Exclusion Ontology" ;
+    rdfs:comment "Ontology for determining if URTI is the correct diagnosis through exclusion of specific respiratory conditions." .
+
+:URTITask a sd:Task ;
+    sd:domain "medical" ;
+    sd:subdomain "respiratory" ;
+    sd:taskName "urti_exclusion" ;
+    sd:persona "medical assistant helping to determine correct respiratory diagnosis" ;
+    sd:question "Is URTI (Upper Respiratory Tract Infection) the correct diagnosis, or does a more specific respiratory condition apply?" ;
+    sd:domainKnowledge """URTI (Upper Respiratory Tract Infection, "common cold") is a DIAGNOSIS OF EXCLUSION. It is correct ONLY when symptoms do not meet criteria for a more specific condition.
+URTI is characterized by:
+- Nasal congestion, rhinorrhea (runny nose)
+- Sore throat (mild)
+- Mild cough (if present)
+- Low-grade or no fever
+- Malaise, mild fatigue
+- Self-limited course (7-10 days)
+URTI is the CORRECT diagnosis when NONE of the following are present:
+PNEUMONIA indicators (→ NOT URTI):
+- High fever with productive cough
+- Purulent sputum (yellow/green)
+- Dyspnea or shortness of breath
+- Localized chest findings or pleuritic pain
+BRONCHITIS indicators (→ NOT URTI):
+- Prominent, persistent cough (>5 days)
+- Productive cough as dominant symptom
+- Chest discomfort with coughing
+- Cough outlasting other symptoms
+INFLUENZA indicators (→ NOT URTI):
+- Sudden onset with high fever (>38.5°C)
+- Severe myalgias (muscle aches)
+- Prostration / severe fatigue
+- Headache prominent
+- Seasonal pattern
+SINUSITIS indicators (→ NOT URTI):
+- Facial pain/pressure over sinuses
+- Purulent nasal discharge
+- Symptoms >10 days without improvement
+- "Double worsening" pattern
+PHARYNGITIS indicators (→ NOT URTI):
+- Severe sore throat as dominant symptom
+- Tonsillar exudates
+- Cervical lymphadenopathy
+- Absence of cough
+TUBERCULOSIS indicators (→ NOT URTI):
+- Chronic course (weeks)
+- Night sweats
+- Weight loss
+- Hemoptysis
+- TB exposure/risk factors
+Answer YES for URTI only if the presentation is MILD, NON-SPECIFIC, and LACKS features of any specific condition above.
+Answer NO if ANY specific condition indicators are present.""" ;
+    sd:targetClass :URTIDiagnosis ;
+    sd:targetTerm "p" .
+
+:term_p a sd:Term ;
+    sd:termName "p" ;
+    sd:termDescription "The patient case being evaluated, including their presenting symptoms, medical history, and clinical findings. The complete clinical picture." ;
+    sd:mapsToClass :PatientCase .
+
+:term_sx a sd:Term ;
+    sd:termName "sx" ;
+    sd:termDescription "A symptom or clinical finding reported by or observed in the patient. Detectable by interview responses (e.g., 'Do you have a cough? Yes') or examination findings." ;
+    sd:mapsToClass :Symptom .
+
+:term_dx a sd:Term ;
+    sd:termName "dx" ;
+    sd:termDescription "A specific respiratory diagnosis that must be excluded before URTI can be confirmed. Includes: Pneumonia, Bronchitis, Influenza, Sinusitis, Pharyngitis, Tuberculosis." ;
+    sd:mapsToClass :Diagnosis .
+
+:pred_HasUpperRespiratorySymptoms a sd:Predicate ;
+    sd:predicateName "HasUpperRespiratorySymptoms" ;
+    sd:predicateTerms "p" ;
+    sd:predicateDescription "True if 'p' presents with upper respiratory symptoms: nasal congestion, rhinorrhea, mild sore throat, or mild cough." ;
+    sd:mapsToClass :HasUpperRespiratorySymptoms .
+
+:pred_NoUpperRespiratorySymptoms a sd:Predicate ;
+    sd:predicateName "NoUpperRespiratorySymptoms" ;
+    sd:predicateTerms "p" ;
+    sd:predicateDescription "True if 'p' lacks typical upper respiratory symptoms." ;
+    sd:mapsToClass :NoUpperRespiratorySymptoms .
+
+:pred_HasHighFever a sd:Predicate ;
+    sd:predicateName "HasHighFever" ;
+    sd:predicateTerms "p" ;
+    sd:predicateDescription "True ONLY if 'p' explicitly has high-grade fever (≥38.5°C / 101.3°F) or fever described as 'high'. Unspecified fever or 'fever: Yes' without severity should be assumed low-grade and does NOT satisfy this predicate." ;
+    sd:mapsToClass :HasHighFever .
+
+:pred_NoFeverOrLowGrade a sd:Predicate ;
+    sd:predicateName "NoFeverOrLowGrade" ;
+    sd:predicateTerms "p" ;
+    sd:predicateDescription "True if 'p' has no fever, or fever is present but not specified as high-grade. Default to True if fever is mentioned without severity qualification." ;
+    sd:mapsToClass :NoFeverOrLowGrade .
+
+:pred_HasPneumoniaIndicators a sd:Predicate ;
+    sd:predicateName "HasPneumoniaIndicators" ;
+    sd:predicateTerms "p" ;
+    sd:predicateDescription "True if 'p' has Pneumonia PATTERN: must have dyspnea/shortness of breath OR purulent sputum (yellow/green) OR chest findings/pleuritic pain. Fever alone is NOT sufficient." ;
+    sd:mapsToClass :HasPneumoniaIndicators .
+
+:pred_NoPneumoniaIndicators a sd:Predicate ;
+    sd:predicateName "NoPneumoniaIndicators" ;
+    sd:predicateTerms "p" ;
+    sd:predicateDescription "True if 'p' lacks ALL of: dyspnea, purulent sputum, chest findings. Fever without these features does NOT indicate pneumonia." ;
+    sd:mapsToClass :NoPneumoniaIndicators .
+
+:pred_HasBronchitisIndicators a sd:Predicate ;
+    sd:predicateName "HasBronchitisIndicators" ;
+    sd:predicateTerms "p" ;
+    sd:predicateDescription "True if 'p' has Bronchitis PATTERN: cough must be PROMINENT and DOMINANT, overshadowing other symptoms. Mild cough alongside nasal symptoms is NOT bronchitis. Look for: 'persistent cough', 'cough is main complaint', 'cough for >5 days as primary symptom'." ;
+    sd:mapsToClass :HasBronchitisIndicators .
+
+:pred_NoBronchitisIndicators a sd:Predicate ;
+    sd:predicateName "NoBronchitisIndicators" ;
+    sd:predicateTerms "p" ;
+    sd:predicateDescription "True if cough is absent, mild, or not the dominant symptom." ;
+    sd:mapsToClass :NoBronchitisIndicators .
+
+:pred_HasInfluenzaIndicators a sd:Predicate ;
+    sd:predicateName "HasInfluenzaIndicators" ;
+    sd:predicateTerms "p" ;
+    sd:predicateDescription "True if 'p' has Influenza TRIAD - ALL THREE required: (1) Sudden/abrupt onset, AND (2) High fever, AND (3) Severe myalgias. Missing ANY of these three = NOT influenza. Fever alone is insufficient." ;
+    sd:mapsToClass :HasInfluenzaIndicators .
+
+:pred_NoInfluenzaIndicators a sd:Predicate ;
+    sd:predicateName "NoInfluenzaIndicators" ;
+    sd:predicateTerms "p" ;
+    sd:predicateDescription "True if the influenza triad is incomplete: missing sudden onset, OR missing high fever, OR missing severe myalgias." ;
+    sd:mapsToClass :NoInfluenzaIndicators .
+
+:pred_HasSinusitisIndicators a sd:Predicate ;
+    sd:predicateName "HasSinusitisIndicators" ;
+    sd:predicateTerms "p" ;
+    sd:predicateDescription "True if 'p' has Sinusitis PATTERN: facial pain/pressure over sinuses OR purulent (colored/thick) nasal discharge OR symptoms >10 days. Clear runny nose is NOT sinusitis." ;
+    sd:mapsToClass :HasSinusitisIndicators .
+
+:pred_NoSinusitisIndicators a sd:Predicate ;
+    sd:predicateName "NoSinusitisIndicators" ;
+    sd:predicateTerms "p" ;
+    sd:predicateDescription "True if 'p' has no facial pain, nasal discharge is clear (not purulent), and symptom duration is not prolonged." ;
+    sd:mapsToClass :NoSinusitisIndicators .
+
+:pred_HasPharyngitisIndicators a sd:Predicate ;
+    sd:predicateName "HasPharyngitisIndicators" ;
+    sd:predicateTerms "p" ;
+    sd:predicateDescription "True if 'p' has Pharyngitis PATTERN: sore throat must be SEVERE and DOMINANT (the main complaint), AND should have at least one of: tonsillar exudates, cervical lymphadenopathy. Mild sore throat with nasal symptoms = URTI, not pharyngitis." ;
+    sd:mapsToClass :HasPharyngitisIndicators .
+
+:pred_NoPharyngitisIndicators a sd:Predicate ;
+    sd:predicateName "NoPharyngitisIndicators" ;
+    sd:predicateTerms "p" ;
+    sd:predicateDescription "True if sore throat is mild/not dominant, OR lacks exudates and lymphadenopathy." ;
+    sd:mapsToClass :NoPharyngitisIndicators .
+
+:pred_HasTuberculosisIndicators a sd:Predicate ;
+    sd:predicateName "HasTuberculosisIndicators" ;
+    sd:predicateTerms "p" ;
+    sd:predicateDescription "True if 'p' has TB PATTERN: MUST have chronic course (symptoms for weeks/months) AND at least one of: night sweats, weight loss, hemoptysis. CRITICAL: Isolated sweating or 'increased sweating' in an ACUTE illness (days, recent contact) is NOT a TB indicator. TB requires chronicity." ;
+    sd:mapsToClass :HasTuberculosisIndicators .
+
+:pred_NoTuberculosisIndicators a sd:Predicate ;
+    sd:predicateName "NoTuberculosisIndicators" ;
+    sd:predicateTerms "p" ;
+    sd:predicateDescription "True if illness is acute (days, not weeks), OR lacks constitutional symptoms (night sweats + weight loss). Recent symptom contact suggests acute infection, not TB." ;
+    sd:mapsToClass :NoTuberculosisIndicators .
+
+:PatientCase a owl:Class ;
+    rdfs:label "Patient Case" .
+
+:Symptom a owl:Class ;
+    rdfs:label "Symptom" .
+
+:Diagnosis a owl:Class ;
+    rdfs:label "Diagnosis" .
+
+:URTIDiagnosis a owl:Class ;
+    rdfs:subClassOf :Diagnosis ;
+    rdfs:label "URTI Diagnosis" .
+
+:HasUpperRespiratorySymptoms a owl:Class ; rdfs:subClassOf :PatientCase .
+:NoUpperRespiratorySymptoms a owl:Class ; rdfs:subClassOf :PatientCase .
+
+:HasHighFever a owl:Class ; rdfs:subClassOf :PatientCase .
+:NoFeverOrLowGrade a owl:Class ; rdfs:subClassOf :PatientCase .
+
+:HasPneumoniaIndicators a owl:Class ; rdfs:subClassOf :PatientCase .
+:NoPneumoniaIndicators a owl:Class ; rdfs:subClassOf :PatientCase .
+
+:HasBronchitisIndicators a owl:Class ; rdfs:subClassOf :PatientCase .
+:NoBronchitisIndicators a owl:Class ; rdfs:subClassOf :PatientCase .
+
+:HasInfluenzaIndicators a owl:Class ; rdfs:subClassOf :PatientCase .
+:NoInfluenzaIndicators a owl:Class ; rdfs:subClassOf :PatientCase .
+
+:HasSinusitisIndicators a owl:Class ; rdfs:subClassOf :PatientCase .
+:NoSinusitisIndicators a owl:Class ; rdfs:subClassOf :PatientCase .
+
+:HasPharyngitisIndicators a owl:Class ; rdfs:subClassOf :PatientCase .
+:NoPharyngitisIndicators a owl:Class ; rdfs:subClassOf :PatientCase .
+
+:HasTuberculosisIndicators a owl:Class ; rdfs:subClassOf :PatientCase .
+:NoTuberculosisIndicators a owl:Class ; rdfs:subClassOf :PatientCase .
+
+:URTIRule a swrl:Imp ;
+    rdfs:label "URTI Diagnosis Rule" ;
+    rdfs:comment "Determines URTI diagnosis through exclusion of specific conditions" ;
+    swrl:body [
+        a swrl:AtomList ;
+        rdf:first [ a swrl:ClassAtom ; swrl:classPredicate :PatientCase ; swrl:argument1 :var_p ] ;
+        rdf:rest [
+            a swrl:AtomList ;
+            rdf:first [ a swrl:ClassAtom ; swrl:classPredicate :HasUpperRespiratorySymptoms ; swrl:argument1 :var_p ] ;
+            rdf:rest [
+                a swrl:AtomList ;
+                rdf:first [ a swrl:ClassAtom ; swrl:classPredicate :NoFeverOrLowGrade ; swrl:argument1 :var_p ] ;
+                rdf:rest [
+                    a swrl:AtomList ;
+                    rdf:first [ a swrl:ClassAtom ; swrl:classPredicate :NoPneumoniaIndicators ; swrl:argument1 :var_p ] ;
+                    rdf:rest [
+                        a swrl:AtomList ;
+                        rdf:first [ a swrl:ClassAtom ; swrl:classPredicate :NoBronchitisIndicators ; swrl:argument1 :var_p ] ;
+                        rdf:rest [
+                            a swrl:AtomList ;
+                            rdf:first [ a swrl:ClassAtom ; swrl:classPredicate :NoInfluenzaIndicators ; swrl:argument1 :var_p ] ;
+                            rdf:rest [
+                                a swrl:AtomList ;
+                                rdf:first [ a swrl:ClassAtom ; swrl:classPredicate :NoSinusitisIndicators ; swrl:argument1 :var_p ] ;
+                                rdf:rest [
+                                    a swrl:AtomList ;
+                                    rdf:first [ a swrl:ClassAtom ; swrl:classPredicate :NoPharyngitisIndicators ; swrl:argument1 :var_p ] ;
+                                    rdf:rest [
+                                        a swrl:AtomList ;
+                                        rdf:first [ a swrl:ClassAtom ; swrl:classPredicate :NoTuberculosisIndicators ; swrl:argument1 :var_p ] ;
+                                        rdf:rest rdf:nil
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    ] ;
+    swrl:head [
+        a swrl:AtomList ;
+        rdf:first [ a swrl:ClassAtom ; swrl:classPredicate :URTIDiagnosis ; swrl:argument1 :var_p ] ;
+        rdf:rest rdf:nil
+    ] .
+
+:var_p a swrl:Variable .
