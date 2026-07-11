@@ -128,7 +128,17 @@ def load_task(ttl_path: str) -> Task:
     )
 
     target_class = _get_uri(g, task_node, SD.targetClass)
-    assert target_class is not None, f"target class not found in {ttl_path}"
+
+    output_classes = {}
+    for oc in g.objects(task_node, SD.outputClass):
+        cls = _get_uri(g, oc, SD.mapsToClass)
+        label = _get_lit(g, oc, SD.classLabel)
+        if cls and label:
+            output_classes[cls] = label
+
+    assert target_class is not None or output_classes, (
+        f"neither targetClass nor outputClass found in {ttl_path}"
+    )
 
     _source_ttl[task_name] = ttl_path
     _ontology_meta[task_name] = OntologyMetadata(
@@ -136,6 +146,7 @@ def load_task(ttl_path: str) -> Task:
         target_term=_get_lit(g, task_node, SD.targetTerm),
         term_class_map=term_class_map,
         predicate_map=predicate_map,
+        output_classes=output_classes,
     )
 
     return task

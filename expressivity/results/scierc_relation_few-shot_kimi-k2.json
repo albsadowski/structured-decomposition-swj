@@ -1,0 +1,866 @@
+{
+  "task": "scierc_relation",
+  "mode": "few-shot",
+  "model": "kimi-k2",
+  "n": 133,
+  "accuracy": 0.8421052631578947,
+  "macro_f1": 0.8414206494084201,
+  "inconsistent_count": 0,
+  "report": {
+    "COMPARE": {
+      "precision": 1.0,
+      "recall": 0.8421052631578947,
+      "f1-score": 0.9142857142857143,
+      "support": 19.0
+    },
+    "CONJUNCTION": {
+      "precision": 0.8636363636363636,
+      "recall": 1.0,
+      "f1-score": 0.926829268292683,
+      "support": 19.0
+    },
+    "EVALUATE-FOR": {
+      "precision": 1.0,
+      "recall": 0.8947368421052632,
+      "f1-score": 0.9444444444444444,
+      "support": 19.0
+    },
+    "FEATURE-OF": {
+      "precision": 0.9166666666666666,
+      "recall": 0.5789473684210527,
+      "f1-score": 0.7096774193548387,
+      "support": 19.0
+    },
+    "HYPONYM-OF": {
+      "precision": 0.8421052631578947,
+      "recall": 0.8421052631578947,
+      "f1-score": 0.8421052631578947,
+      "support": 19.0
+    },
+    "PART-OF": {
+      "precision": 0.7083333333333334,
+      "recall": 0.8947368421052632,
+      "f1-score": 0.7906976744186046,
+      "support": 19.0
+    },
+    "USED-FOR": {
+      "precision": 0.6956521739130435,
+      "recall": 0.8421052631578947,
+      "f1-score": 0.7619047619047619,
+      "support": 19.0
+    },
+    "accuracy": 0.8421052631578947,
+    "macro avg": {
+      "precision": 0.8609134001010431,
+      "recall": 0.8421052631578947,
+      "f1-score": 0.8414206494084201,
+      "support": 133.0
+    },
+    "weighted avg": {
+      "precision": 0.860913400101043,
+      "recall": 0.8421052631578947,
+      "f1-score": 0.8414206494084201,
+      "support": 133.0
+    }
+  },
+  "predictions": [
+    {
+      "index": 5,
+      "text": "Our results not only show that similar distinguishing speech processes were identified ; our [[ APT-based classifier ]] yielded better classification accuracy than the << MPT-based classifier >> whilst using fewer classification features .",
+      "truth": "COMPARE",
+      "pred": "COMPARE"
+    },
+    {
+      "index": 6,
+      "text": "By using [[ commands ]] or << rules >> which are defined to facilitate the construction of format expected or some mathematical expressions , elaborate and pretty documents can be successfully obtained .",
+      "truth": "CONJUNCTION",
+      "pred": "CONJUNCTION"
+    },
+    {
+      "index": 7,
+      "text": "The [[ transfer phase ]] in << machine translation -LRB- MT -RRB- systems >> has been considered to be more complicated than analysis and generation , since it is inherently a conglomeration of individual lexical rules .",
+      "truth": "PART-OF",
+      "pred": "PART-OF"
+    },
+    {
+      "index": 8,
+      "text": "A deterministic parser is under development which represents a departure from traditional deterministic parsers in that << it >> combines both [[ symbolic and connectionist components ]] .",
+      "truth": "PART-OF",
+      "pred": "PART-OF"
+    },
+    {
+      "index": 9,
+      "text": "We also introduce a new strategy , called Begin/After tagging or BIA , and show that [[ it ]] is competitive to the best other << strategies >> .",
+      "truth": "COMPARE",
+      "pred": "COMPARE"
+    },
+    {
+      "index": 10,
+      "text": "Effectiveness of the proposed << framework >> was confirmed in the [[ success rate of retrieval ]] and the average number of turns for information access .",
+      "truth": "EVALUATE-FOR",
+      "pred": "EVALUATE-FOR"
+    },
+    {
+      "index": 11,
+      "text": "It demonstrates that the proposed [[ cluster tree ]] achieves better temporal consistency than the previous << sequential and non-sequential tracking approaches >> .",
+      "truth": "COMPARE",
+      "pred": "COMPARE"
+    },
+    {
+      "index": 12,
+      "text": "In this paper , we present an << unlexicalized parser >> for German which employs smoothing and suffix analysis to achieve a [[ labelled bracket F-score ]] of 76.2 , higher than previously reported results on the NEGRA corpus .",
+      "truth": "EVALUATE-FOR",
+      "pred": "EVALUATE-FOR"
+    },
+    {
+      "index": 13,
+      "text": "Experimental results indicate that the new << algorithm >> is able to achieve an [[ average packing utilization ]] of more than 87 % .",
+      "truth": "EVALUATE-FOR",
+      "pred": "EVALUATE-FOR"
+    },
+    {
+      "index": 14,
+      "text": "Furthermore , we introduce global variables in the model , which can represent << global properties >> such as translation , scale or [[ viewpoint ]] .",
+      "truth": "HYPONYM-OF",
+      "pred": "HYPONYM-OF"
+    },
+    {
+      "index": 15,
+      "text": "Two main classes of << approaches >> have been studied to perform monocular nonrigid 3D reconstruction : Template-based methods and [[ Non-rigid Structure from Motion techniques ]] .",
+      "truth": "HYPONYM-OF",
+      "pred": "HYPONYM-OF"
+    },
+    {
+      "index": 17,
+      "text": "The system participated in all the tracks of the << segmentation bakeoff >> -- PK-open , PK-closed , AS-open , AS-closed , HK-open , [[ HK-closed ]] , MSR-open and MSR - closed -- and achieved the state-of-the-art performance in MSR-open , MSR-close and PK-open tracks .",
+      "truth": "HYPONYM-OF",
+      "pred": "PART-OF"
+    },
+    {
+      "index": 18,
+      "text": "In contrast to other works that address this problem using multiple classifiers , each one specialized for a specific orientation , we propose a simple two-step << approach >> with an [[ estimation stage ]] and a classification stage .",
+      "truth": "PART-OF",
+      "pred": "PART-OF"
+    },
+    {
+      "index": 19,
+      "text": "We show that the [[ trainable sentence planner ]] performs better than the << rule-based systems >> and the baselines , and as well as the hand-crafted system .",
+      "truth": "COMPARE",
+      "pred": "COMPARE"
+    },
+    {
+      "index": 21,
+      "text": "This paper proposes a method for learning joint embed-dings of images and text using a << two-branch neural network >> with multiple layers of linear projections followed by [[ nonlinearities ]] .",
+      "truth": "PART-OF",
+      "pred": "PART-OF"
+    },
+    {
+      "index": 22,
+      "text": "A consequence of that framework was a proposal for a new [[ approach ]] to the << segmentation of complex scenes >> into regions corresponding to coherent surfaces rather than merely regions of similar color .",
+      "truth": "USED-FOR",
+      "pred": "USED-FOR"
+    },
+    {
+      "index": 23,
+      "text": "A << declarative formalism >> is presented which permits [[ direct mappings of one feature structure into another ]] , and illustrative examples are given of its application to areas of current interest .",
+      "truth": "FEATURE-OF",
+      "pred": "FEATURE-OF"
+    },
+    {
+      "index": 24,
+      "text": "Our experiments also show that current technology for extracting subcategorization frames initially designed for [[ written texts ]] works equally well for << spoken language >> .",
+      "truth": "COMPARE",
+      "pred": "COMPARE"
+    },
+    {
+      "index": 25,
+      "text": "A [[ random modulation scheme ]] produces << near-Bernoulli statistics >> even for highly correlated inputs .",
+      "truth": "USED-FOR",
+      "pred": "USED-FOR"
+    },
+    {
+      "index": 26,
+      "text": "We provide a detailed preliminary analysis of << inter-annotator agreement >> - both the level of agreement and the types of [[ inter-annotator variation ]] .",
+      "truth": "FEATURE-OF",
+      "pred": "CONJUNCTION"
+    },
+    {
+      "index": 27,
+      "text": "In a motorized vehicle a number of easily measurable signals with frequency components related to the rotational speed of the engine can be found , e.g. , [[ vibrations ]] , << electrical system voltage level >> , and ambient sound .",
+      "truth": "CONJUNCTION",
+      "pred": "CONJUNCTION"
+    },
+    {
+      "index": 28,
+      "text": "We describe a new << system >> that enhances Criterion 's capability , by evaluating multiple aspects of [[ coherence in essays ]] .",
+      "truth": "EVALUATE-FOR",
+      "pred": "EVALUATE-FOR"
+    },
+    {
+      "index": 29,
+      "text": "Sentence ambiguities can be resolved by using [[ domain targeted preference knowledge ]] without using complicated large << knowledgebases >> .",
+      "truth": "COMPARE",
+      "pred": "COMPARE"
+    },
+    {
+      "index": 30,
+      "text": "We provide a detailed preliminary analysis of << inter-annotator agreement >> - both the [[ level of agreement ]] and the types of inter-annotator variation .",
+      "truth": "FEATURE-OF",
+      "pred": "FEATURE-OF"
+    },
+    {
+      "index": 31,
+      "text": "The system was then transferred from the [[ RM task ]] to the << ATIS CSR task >> and a limited number of development tests performed .",
+      "truth": "CONJUNCTION",
+      "pred": "CONJUNCTION"
+    },
+    {
+      "index": 32,
+      "text": "The method has been successfully applied to << robust automatic speech recognition >> in [[ reverberant environments ]] by model selection .",
+      "truth": "FEATURE-OF",
+      "pred": "FEATURE-OF"
+    },
+    {
+      "index": 33,
+      "text": "A method of sense resolution is proposed that is based on WordNet , an on-line lexical database that incorporates semantic relations -LRB- synonymy , antonymy , [[ hyponymy ]] , << meronymy >> , causal and troponymic entailment -RRB- as labeled pointers between word senses .",
+      "truth": "CONJUNCTION",
+      "pred": "CONJUNCTION"
+    },
+    {
+      "index": 34,
+      "text": "This [[ topology ]] is then incorporated into the << Hidden Conditional Ordinal Random Field -LRB- H-CORF -RRB- framework >> for dynamic ordinal regression by constraining H-CORF parameters to lie on the ordinal manifold .",
+      "truth": "PART-OF",
+      "pred": "PART-OF"
+    },
+    {
+      "index": 35,
+      "text": "Second , we devise a new << track clustering cost function >> that includes [[ occlusion reasoning ]] , in the form of depth ordering constraints , as well as motion similarity along the tracks .",
+      "truth": "PART-OF",
+      "pred": "PART-OF"
+    },
+    {
+      "index": 36,
+      "text": "[[ It ]] is demonstrated qualitatively and quantitatively on a dataset of scenes and is suitable for current work in << unsupervised object discovery >> without top-down knowledge .",
+      "truth": "USED-FOR",
+      "pred": "USED-FOR"
+    },
+    {
+      "index": 37,
+      "text": "We demonstrate that for certain << field structured extraction tasks >> , such as classified advertisements and [[ bibliographic citations ]] , small amounts of prior knowledge can be used to learn effective models in a primarily unsupervised fashion .",
+      "truth": "HYPONYM-OF",
+      "pred": "HYPONYM-OF"
+    },
+    {
+      "index": 38,
+      "text": "Based on a corpus annotation project , this paper reports the discursive usage of 6 << Chinese punctuation marks >> in news commentary texts : Colon , Dash , Ellipsis , Exclamation Mark , Question Mark , and [[ Semicolon ]] .",
+      "truth": "HYPONYM-OF",
+      "pred": "HYPONYM-OF"
+    },
+    {
+      "index": 39,
+      "text": "We show these properties by thorough testing on standard databases and on a new << database >> made of motorbikes under planar rotations , and with challenging [[ conditions ]] such as cluttered backgrounds , changing illumination conditions and partial occlusions .",
+      "truth": "FEATURE-OF",
+      "pred": "FEATURE-OF"
+    },
+    {
+      "index": 40,
+      "text": "A [[ deterministic parser ]] is under development which represents a departure from traditional << deterministic parsers >> in that it combines both symbolic and connectionist components .",
+      "truth": "COMPARE",
+      "pred": "HYPONYM-OF"
+    },
+    {
+      "index": 41,
+      "text": "Both [[ rhetorical structure ]] and punctuation have been helpful in << discourse processing >> .",
+      "truth": "USED-FOR",
+      "pred": "USED-FOR"
+    },
+    {
+      "index": 42,
+      "text": "In experiments using the [[ Penn WSJ corpus ]] , our automatically trained model gave a performance of 86.6 % -LRB- F1 , sentences < 40 words -RRB- , which is comparable to that of an << unlexicalized PCFG parser >> created using extensive manual feature selection .",
+      "truth": "EVALUATE-FOR",
+      "pred": "EVALUATE-FOR"
+    },
+    {
+      "index": 43,
+      "text": "Our << system >> incorporates a [[ linguistic parser/generator ]] for LFG , a transfer component for parse reduction operating on packed parse forests , and a maximum-entropy model for stochastic output selection .",
+      "truth": "PART-OF",
+      "pred": "PART-OF"
+    },
+    {
+      "index": 44,
+      "text": "The format of the << corpus >> adopts the [[ Child Language Data Exchange System -LRB- CHILDES -RRB- ]] .",
+      "truth": "FEATURE-OF",
+      "pred": "USED-FOR"
+    },
+    {
+      "index": 45,
+      "text": "The << model >> gives an [[ F-measure ]] improvement of ~ 1.25 % beyond the base parser , and an ~ 0.25 % improvement beyond Collins -LRB- 2000 -RRB- reranker .",
+      "truth": "EVALUATE-FOR",
+      "pred": "EVALUATE-FOR"
+    },
+    {
+      "index": 46,
+      "text": "We show that various features based on the structure of email-threads can be used to improve upon [[ lexical similarity ]] of << discourse segments >> for question-answer pairing .",
+      "truth": "FEATURE-OF",
+      "pred": "FEATURE-OF"
+    },
+    {
+      "index": 47,
+      "text": "On the other hand , the << manifold learning methods >> suggest to use the [[ Euclidean distance ]] in the local range , combining with the graphical relationship between samples , for approximating the geodesic distance .",
+      "truth": "USED-FOR",
+      "pred": "USED-FOR"
+    },
+    {
+      "index": 48,
+      "text": "Compared with previous [[ model-based approaches ]] , our << approach >> has the following advantages .",
+      "truth": "COMPARE",
+      "pred": "COMPARE"
+    },
+    {
+      "index": 49,
+      "text": "We then develop a deep triplet-ranking model for instance-level SBIR with a novel [[ data augmentation ]] and << staged pre-training strategy >> to alleviate the issue of insufficient fine-grained training data .",
+      "truth": "CONJUNCTION",
+      "pred": "CONJUNCTION"
+    },
+    {
+      "index": 50,
+      "text": "We compare the lexically-induced relations with the original << MeSH relations >> : after a quantitative evaluation of their congruence through [[ recall and precision metrics ]] , we perform a qualitative , human analysis ofthe ` new ' relations not present in the MeSH .",
+      "truth": "EVALUATE-FOR",
+      "pred": "EVALUATE-FOR"
+    },
+    {
+      "index": 51,
+      "text": "The issue of system response to users has been extensively studied by the [[ natural language generation community ]] , though rarely in the context of << dialog systems >> .",
+      "truth": "COMPARE",
+      "pred": "USED-FOR"
+    },
+    {
+      "index": 52,
+      "text": "This paper proposes a new << methodology >> to improve the accuracy of a [[ term aggregation system ]] using each author 's text as a coherent corpus .",
+      "truth": "EVALUATE-FOR",
+      "pred": "USED-FOR"
+    },
+    {
+      "index": 53,
+      "text": "[[ Dictionary construction ]] , one of the most difficult tasks in developing a << machine translation system >> , is expensive .",
+      "truth": "PART-OF",
+      "pred": "PART-OF"
+    },
+    {
+      "index": 54,
+      "text": "The development and evolution of such a hybrid architecture has lead to a [[ parser ]] which is superior to any known << deterministic parser >> .",
+      "truth": "COMPARE",
+      "pred": "COMPARE"
+    },
+    {
+      "index": 55,
+      "text": "We present a new method for << detecting interest points >> using [[ histogram information ]] .",
+      "truth": "USED-FOR",
+      "pred": "USED-FOR"
+    },
+    {
+      "index": 56,
+      "text": "The same system used in a validation mode , can be used to check and spot alignment errors in multilingually aligned wordnets as [[ BalkaNet ]] and << EuroWordNet >> .",
+      "truth": "CONJUNCTION",
+      "pred": "CONJUNCTION"
+    },
+    {
+      "index": 57,
+      "text": "These [[ words ]] appear frequently enough in << dialog >> to warrant serious attention , yet present natural language search engines perform poorly on queries containing them .",
+      "truth": "PART-OF",
+      "pred": "PART-OF"
+    },
+    {
+      "index": 58,
+      "text": "We analyze a reweighted version of the Kikuchi approximation for estimating the [[ log partition function of a product distribution ]] defined over a << region graph >> .",
+      "truth": "FEATURE-OF",
+      "pred": "FEATURE-OF"
+    },
+    {
+      "index": 59,
+      "text": "To this end , we propose to efficiently locate object regions according to [[ pixelwise object probability ]] , rather than measuring the << objectness >> from a set of sampled windows .",
+      "truth": "COMPARE",
+      "pred": "COMPARE"
+    },
+    {
+      "index": 60,
+      "text": "This method requires a [[ source-language dependency parser ]] , << target language word segmentation >> and an unsupervised word alignment component .",
+      "truth": "CONJUNCTION",
+      "pred": "CONJUNCTION"
+    },
+    {
+      "index": 61,
+      "text": "The result shows that our [[ system ]] outperforms the << baseline system >> based on the IBM models in both translation speed and quality .",
+      "truth": "COMPARE",
+      "pred": "COMPARE"
+    },
+    {
+      "index": 62,
+      "text": "The model is adapted to an [[ online left to right chart-parser ]] for << word lattices >> , integrating acoustic , n-gram , and parser probabilities .",
+      "truth": "USED-FOR",
+      "pred": "USED-FOR"
+    },
+    {
+      "index": 63,
+      "text": "This paper describes the framework of a << Korean phonological knowledge base system >> using the [[ unification-based grammar formalism ]] : Korean Phonology Structure Grammar -LRB- KPSG -RRB- .",
+      "truth": "USED-FOR",
+      "pred": "USED-FOR"
+    },
+    {
+      "index": 64,
+      "text": "This research is part of a larger study of [[ anaphoric expressions ]] , the results of which will be incorporated into a << natural language generation system >> .",
+      "truth": "USED-FOR",
+      "pred": "PART-OF"
+    },
+    {
+      "index": 65,
+      "text": "We describe a new method for the representation of << NLP structures >> within [[ reranking approaches ]] .",
+      "truth": "FEATURE-OF",
+      "pred": "USED-FOR"
+    },
+    {
+      "index": 66,
+      "text": "This report describes << Paul >> , a computer text generation system designed to create cohesive text through the use of [[ lexical substitutions ]] .",
+      "truth": "USED-FOR",
+      "pred": "PART-OF"
+    },
+    {
+      "index": 67,
+      "text": "The features of the [[ definition sentences ]] in the << dictionary >> , the mechanical extraction of the hierarchical relations and the estimation of the results are discussed .",
+      "truth": "PART-OF",
+      "pred": "PART-OF"
+    },
+    {
+      "index": 68,
+      "text": "Due to the capacity of pan-tilt-zoom -LRB- PTZ -RRB- cameras to simultaneously cover a panoramic area and maintain high resolution imagery , researches in << automated surveillance systems >> with multiple [[ PTZ cameras ]] have become increasingly important .",
+      "truth": "FEATURE-OF",
+      "pred": "PART-OF"
+    },
+    {
+      "index": 69,
+      "text": "We show that intrinsic image methods can be used to refine an initial , low-frequency shading estimate based on a << global lighting reconstruction >> from an original [[ texture and coarse scene geometry ]] in order to resolve the inherent global ambiguity in shading .",
+      "truth": "FEATURE-OF",
+      "pred": "USED-FOR"
+    },
+    {
+      "index": 70,
+      "text": "We present a << syntax-based constraint >> for word alignment , known as the [[ cohesion constraint ]] .",
+      "truth": "HYPONYM-OF",
+      "pred": "HYPONYM-OF"
+    },
+    {
+      "index": 71,
+      "text": "This work presents an automated technique for detecting reflections in image sequences by analyzing << motion trajectories >> of [[ feature points ]] .",
+      "truth": "FEATURE-OF",
+      "pred": "FEATURE-OF"
+    },
+    {
+      "index": 72,
+      "text": "When used as pre-training for action recognition , << our method >> gives significant gains over learning without external data on [[ benchmark datasets ]] like UCF101 and HMDB51 .",
+      "truth": "EVALUATE-FOR",
+      "pred": "EVALUATE-FOR"
+    },
+    {
+      "index": 73,
+      "text": "A '' graphics for vision '' approach is proposed to address the problem of reconstruction from a large and imperfect data set : << reconstruction >> on demand by tensor voting , or [[ ROD-TV ]] .",
+      "truth": "USED-FOR",
+      "pred": "USED-FOR"
+    },
+    {
+      "index": 74,
+      "text": "In a motorized vehicle a number of easily measurable signals with [[ frequency components ]] related to the << rotational speed of the engine >> can be found , e.g. , vibrations , electrical system voltage level , and ambient sound .",
+      "truth": "FEATURE-OF",
+      "pred": "FEATURE-OF"
+    },
+    {
+      "index": 75,
+      "text": "Experiments are done on a ` flat ' list of terms obtained from an originally << hierarchically-structured terminology >> : the French version of the [[ US National Library of Medicine MeSH thesaurus ]] .",
+      "truth": "HYPONYM-OF",
+      "pred": "HYPONYM-OF"
+    },
+    {
+      "index": 76,
+      "text": "Given two times observations , we formulate fine-grained change detection as a joint optimization problem of three related factors , i.e. , [[ normal-aware lighting difference ]] , << camera geometry correction flow >> , and real scene change mask .",
+      "truth": "CONJUNCTION",
+      "pred": "CONJUNCTION"
+    },
+    {
+      "index": 77,
+      "text": "[[ Image matching ]] is a fundamental problem in << Computer Vision >> .",
+      "truth": "HYPONYM-OF",
+      "pred": "PART-OF"
+    },
+    {
+      "index": 78,
+      "text": "We show how [[ this ]] can efficiently be combined with << random-projection based methods >> for 2 NN search , such as locality-sensitive hashing -LRB- LSH -RRB- or random projection trees .",
+      "truth": "CONJUNCTION",
+      "pred": "CONJUNCTION"
+    },
+    {
+      "index": 79,
+      "text": "In real-world action recognition problems , low-level features can not adequately characterize the [[ rich spatial-temporal structures ]] in << action videos >> .",
+      "truth": "FEATURE-OF",
+      "pred": "FEATURE-OF"
+    },
+    {
+      "index": 80,
+      "text": "A larger model trained after the deadline achieves 80.5 % macro-average F1 , 87.6 % [[ syntactic dependencies LAS ]] , and 73.1 % << semantic dependencies F1 >> .",
+      "truth": "CONJUNCTION",
+      "pred": "CONJUNCTION"
+    },
+    {
+      "index": 81,
+      "text": "This paper shows how << dictionary word sense definitions >> can be analysed by applying a [[ hierarchy of phrasal patterns ]] .",
+      "truth": "USED-FOR",
+      "pred": "USED-FOR"
+    },
+    {
+      "index": 82,
+      "text": "To advance research on animated GIF understanding , we collected a new dataset , Tumblr GIF -LRB- TGIF -RRB- , with 100K << animated GIFs >> from Tumblr and 120K [[ natural language descriptions ]] obtained via crowdsourcing .",
+      "truth": "CONJUNCTION",
+      "pred": "CONJUNCTION"
+    },
+    {
+      "index": 83,
+      "text": "We propose a novel << metric learning formulation >> called [[ Weighted Approximate Rank Component Analysis -LRB- WARCA -RRB- ]] .",
+      "truth": "HYPONYM-OF",
+      "pred": "HYPONYM-OF"
+    },
+    {
+      "index": 84,
+      "text": "Using our [[ approach ]] we are able to intelligently segment scenes with objects of greater complexity than previous << physics-based segmentation algorithms >> .",
+      "truth": "COMPARE",
+      "pred": "COMPARE"
+    },
+    {
+      "index": 85,
+      "text": "We present a single-image highlight removal method that incorporates [[ illumination-based constraints ]] into << image in-painting >> .",
+      "truth": "PART-OF",
+      "pred": "USED-FOR"
+    },
+    {
+      "index": 86,
+      "text": "[[ Background maintenance ]] is a frequent element of << video surveillance systems >> .",
+      "truth": "PART-OF",
+      "pred": "PART-OF"
+    },
+    {
+      "index": 87,
+      "text": "Some of the principles which are relevant to the topic of this paper are : -LRB- a -RRB- [[ Multiple Layer of Grammars ]] -LRB- b -RRB- << Multiple Layer Presentation >> -LRB- c -RRB- Lexicon Driven Processing -LRB- d -RRB- Form-Oriented Dictionary Description .",
+      "truth": "CONJUNCTION",
+      "pred": "CONJUNCTION"
+    },
+    {
+      "index": 88,
+      "text": "We evaluated the << topic signatures >> on a [[ WSD task ]] , where we trained a second-order vector cooccurrence algorithm on standard WSD datasets , with promising results .",
+      "truth": "EVALUATE-FOR",
+      "pred": "EVALUATE-FOR"
+    },
+    {
+      "index": 89,
+      "text": "Our numerical hybrid local and global mode-seeking tracker is validated on challenging << airborne videos >> with heavy occlusion and large [[ camera motions ]] .",
+      "truth": "FEATURE-OF",
+      "pred": "FEATURE-OF"
+    },
+    {
+      "index": 90,
+      "text": "The information gained from corpus research and the analyses that are proposed are realized in the framework of [[ SILVA ]] , a << parsing and extraction tool >> for German text corpora .",
+      "truth": "HYPONYM-OF",
+      "pred": "HYPONYM-OF"
+    },
+    {
+      "index": 91,
+      "text": "Our << system >> outperforms the average system in categorization task but does a common job in [[ adhoc task ]] .",
+      "truth": "EVALUATE-FOR",
+      "pred": "EVALUATE-FOR"
+    },
+    {
+      "index": 92,
+      "text": "While such decoding is an essential underpinning , much recent work suggests that natural language interfaces will never appear cooperative or graceful unless they also incorporate numerous << non-literal aspects of communication >> , such as [[ robust communication procedures ]] .",
+      "truth": "HYPONYM-OF",
+      "pred": "HYPONYM-OF"
+    },
+    {
+      "index": 93,
+      "text": "The recognizer uses a << time-synchronous graph-search strategy >> which is shown to still be viable with a 20k-word vocabulary when used with [[ bigram back-off language models ]] .",
+      "truth": "CONJUNCTION",
+      "pred": "CONJUNCTION"
+    },
+    {
+      "index": 94,
+      "text": "Numerical tests on large-scale logistic regression problems reveal that our [[ method ]] is more robust and substantially outperforms current << state-of-the-art methods >> .",
+      "truth": "COMPARE",
+      "pred": "COMPARE"
+    },
+    {
+      "index": 95,
+      "text": "In this paper , we present a << corpus-based supervised word sense disambiguation -LRB- WSD -RRB- system >> for Dutch which combines statistical classification -LRB- [[ maximum entropy ]] -RRB- with linguistic information .",
+      "truth": "PART-OF",
+      "pred": "PART-OF"
+    },
+    {
+      "index": 96,
+      "text": "Numerical tests on [[ large-scale logistic regression problems ]] reveal that our method is more robust and substantially outperforms current << state-of-the-art methods >> .",
+      "truth": "EVALUATE-FOR",
+      "pred": "EVALUATE-FOR"
+    },
+    {
+      "index": 97,
+      "text": "b -RRB- The UV procedure is based on three different << confidence tests >> , two based on acoustic measures and [[ one ]] founded on linguistic information , applied in a hierarchical structure .",
+      "truth": "HYPONYM-OF",
+      "pred": "HYPONYM-OF"
+    },
+    {
+      "index": 98,
+      "text": "Test performance data will show that a [[ PCFG ]] yields good results in << morphological parsing >> .",
+      "truth": "USED-FOR",
+      "pred": "USED-FOR"
+    },
+    {
+      "index": 99,
+      "text": "For our purposes , a hub is a [[ node ]] in a << graph >> with in-degree greater than one and out-degree greater than one .",
+      "truth": "PART-OF",
+      "pred": "PART-OF"
+    },
+    {
+      "index": 100,
+      "text": "The experimental results show that the proposed histogram-based interest point detectors perform particularly well for the tasks of matching textured scenes under blur and illumination changes , in terms of [[ repeatability ]] and << distinctiveness >> .",
+      "truth": "CONJUNCTION",
+      "pred": "CONJUNCTION"
+    },
+    {
+      "index": 101,
+      "text": "We attack an inexplicably under-explored language genre of spoken language -- lyrics in music -- via completely unsuper-vised induction of an << SMT-style stochastic transduction grammar >> for [[ hip hop lyrics ]] , yielding a fully-automatically learned challenge-response system that produces rhyming lyrics given an input .",
+      "truth": "FEATURE-OF",
+      "pred": "USED-FOR"
+    },
+    {
+      "index": 102,
+      "text": "The << system >> is implemented in CommonLisp and has been tested on examples from [[ German derivation ]] .",
+      "truth": "EVALUATE-FOR",
+      "pred": "EVALUATE-FOR"
+    },
+    {
+      "index": 103,
+      "text": "<< Automatic evaluation metrics >> for Machine Translation -LRB- MT -RRB- systems , such as [[ BLEU ]] or NIST , are now well established .",
+      "truth": "HYPONYM-OF",
+      "pred": "HYPONYM-OF"
+    },
+    {
+      "index": 104,
+      "text": "The [[ model ]] is embodied in a << program >> , APT , that can reproduce segments of actual tape-recorded descriptions , using organizational and discourse strategies derived through analysis of our corpus .",
+      "truth": "PART-OF",
+      "pred": "PART-OF"
+    },
+    {
+      "index": 105,
+      "text": "Specifically , weights are estimated so that [[ evaluation measures ]] of << ASR >> and IR are equivalent .",
+      "truth": "EVALUATE-FOR",
+      "pred": "EVALUATE-FOR"
+    },
+    {
+      "index": 106,
+      "text": "The agreement in question involves number in [[ nouns ]] and << reflexive pronouns >> and is syntactic rather than semantic in nature because grammatical number in English , like grammatical gender in languages such as French , is partly arbitrary .",
+      "truth": "CONJUNCTION",
+      "pred": "CONJUNCTION"
+    },
+    {
+      "index": 107,
+      "text": "Since wordbreaks are not conventionally marked in Chinese text corpora , a << character-based collocation system >> has the dual advantages of avoiding pre-processing distortion and directly [[ accessing sub-lexical information ]] .",
+      "truth": "FEATURE-OF",
+      "pred": "FEATURE-OF"
+    },
+    {
+      "index": 108,
+      "text": "Online action detection goes one step further and is more challenging , which identifies the [[ action type ]] and localizes the << action positions >> on the fly from the untrimmed stream .",
+      "truth": "CONJUNCTION",
+      "pred": "CONJUNCTION"
+    },
+    {
+      "index": 109,
+      "text": "The feature functions are trained off-line on different types of text and their log-linear combination is then used to retrieve the best M [[ translation paths ]] in the << graph >> .",
+      "truth": "PART-OF",
+      "pred": "PART-OF"
+    },
+    {
+      "index": 110,
+      "text": "We evaluate our approach on several standard << datasets >> such as im2gps , San Francisco and [[ MediaEval2010 ]] , and obtain state-of-the-art results .",
+      "truth": "HYPONYM-OF",
+      "pred": "HYPONYM-OF"
+    },
+    {
+      "index": 111,
+      "text": "We compare our results to << state of the art methods >> such as mi-cro phase shifting and [[ modulated phase shifting ]] .",
+      "truth": "HYPONYM-OF",
+      "pred": "HYPONYM-OF"
+    },
+    {
+      "index": 112,
+      "text": "The hypothesis under examination is that [[ useful terms ]] tend to be more similar to each other than to other << query terms >> .",
+      "truth": "COMPARE",
+      "pred": "HYPONYM-OF"
+    },
+    {
+      "index": 113,
+      "text": "Experiments are described and powerful [[ training techniques ]] are demonstrated that permit << decision-making >> by the connectionist component in the parsing process .",
+      "truth": "USED-FOR",
+      "pred": "USED-FOR"
+    },
+    {
+      "index": 114,
+      "text": "The classifier we use in both stages is based on a << boosted combination of Random Ferns >> over [[ local histograms of oriented gradients -LRB- HOGs -RRB- ]] , which we compute during a pre-processing step .",
+      "truth": "FEATURE-OF",
+      "pred": "CONJUNCTION"
+    },
+    {
+      "index": 115,
+      "text": "Experimental comparison with other << techniques >> shows the effectiveness of our [[ approach ]] .",
+      "truth": "COMPARE",
+      "pred": "COMPARE"
+    },
+    {
+      "index": 116,
+      "text": "This paper presents necessary and sufficient conditions for the use of [[ demonstrative expressions ]] in << English >> and discusses implications for current discourse processing algorithms .",
+      "truth": "FEATURE-OF",
+      "pred": "PART-OF"
+    },
+    {
+      "index": 117,
+      "text": "[[ Wallflower ]] is shown to outperform previous << algorithms >> by handling a greater set of the difficult situations that can occur .",
+      "truth": "COMPARE",
+      "pred": "COMPARE"
+    },
+    {
+      "index": 118,
+      "text": "Motivated by this [[ semantic criterion ]] we analyze the empirical quality of << distributional word feature vectors >> and its impact on word similarity results , proposing an objective measure for evaluating feature vector quality .",
+      "truth": "EVALUATE-FOR",
+      "pred": "EVALUATE-FOR"
+    },
+    {
+      "index": 119,
+      "text": "We describe << three techniques >> for making syntactic analysis more robust -- an agenda-based scheduling parser , a recovery technique for failed parses , and a new [[ technique ]] called terminal substring parsing .",
+      "truth": "HYPONYM-OF",
+      "pred": "PART-OF"
+    },
+    {
+      "index": 120,
+      "text": "The compact description of a video sequence through a single image map and a dominant motion has applications in several << domains >> , including video browsing and retrieval , [[ compression ]] , mosaicing , and visual summarization .",
+      "truth": "HYPONYM-OF",
+      "pred": "HYPONYM-OF"
+    },
+    {
+      "index": 121,
+      "text": "Sentence planning is a set of inter-related but distinct << tasks >> , one of which is [[ sentence scoping ]] , i.e. the choice of syntactic structure for elementary speech acts and the decision of how to combine them into one or more sentences .",
+      "truth": "PART-OF",
+      "pred": "HYPONYM-OF"
+    },
+    {
+      "index": 122,
+      "text": "When a constraint is amenable to short supports , the [[ short support set ]] can be exponentially smaller than the << full-length support set >> .",
+      "truth": "COMPARE",
+      "pred": "COMPARE"
+    },
+    {
+      "index": 123,
+      "text": "Unlike existing << interest point detectors >> , which measure [[ pixel-wise differences in image intensity ]] , our detectors incorporate histogram-based representations , and thus can find image regions that present a distinct distribution in the neighborhood .",
+      "truth": "EVALUATE-FOR",
+      "pred": "FEATURE-OF"
+    },
+    {
+      "index": 124,
+      "text": "The strong description and modeling properties of differential features make [[ them ]] useful tools that can be efficiently used as constraints for << 3 -- D reconstruction >> .",
+      "truth": "USED-FOR",
+      "pred": "USED-FOR"
+    },
+    {
+      "index": 125,
+      "text": "The JAVELIN system integrates a flexible , << planning-based architecture >> with a variety of [[ language processing modules ]] to provide an open-domain question answering capability on free text .",
+      "truth": "CONJUNCTION",
+      "pred": "CONJUNCTION"
+    },
+    {
+      "index": 126,
+      "text": "We describe two experiments : one which ignored word-sense distinctions , resulting in 6.3 % [[ accuracy ]] for << semantic classification >> of verbs based on -LRB- Levin , 1993 -RRB- ; and one which exploited word-sense distinctions , resulting in 97.9 % accuracy .",
+      "truth": "EVALUATE-FOR",
+      "pred": "EVALUATE-FOR"
+    },
+    {
+      "index": 127,
+      "text": "Our experiments demonstrate that the << induced model >> achieves significantly higher [[ accuracy ]] than a state-of-the-art coherence model .",
+      "truth": "EVALUATE-FOR",
+      "pred": "EVALUATE-FOR"
+    },
+    {
+      "index": 128,
+      "text": "We evaluate our paraphrase extraction and ranking methods using a set of manual word alignments , and contrast the quality with [[ paraphrases ]] extracted from << automatic alignments >> .",
+      "truth": "PART-OF",
+      "pred": "PART-OF"
+    },
+    {
+      "index": 129,
+      "text": "This paper describes three relatively << domain-independent capabilities >> recently added to the Paramax spoken language understanding system : non-monotonic reasoning , [[ implicit reference resolution ]] , and database query paraphrase .",
+      "truth": "HYPONYM-OF",
+      "pred": "HYPONYM-OF"
+    },
+    {
+      "index": 130,
+      "text": "The paper provides an overview of the research conducted at LIMSI in the field of speech processing , but also in the related areas of << Human-Machine Communication >> , including Natural Language Processing , [[ Non Verbal and Multimodal Communication ]] .",
+      "truth": "HYPONYM-OF",
+      "pred": "HYPONYM-OF"
+    },
+    {
+      "index": 131,
+      "text": "The algorithm utilizes both spatial and temporal intensity variation as cues : the [[ former ]] constrains flow and the << latter >> constrains surface orientation ; combining both cues enables dense reconstruction of both textured and texture-less surfaces .",
+      "truth": "CONJUNCTION",
+      "pred": "CONJUNCTION"
+    },
+    {
+      "index": 132,
+      "text": "The problem of << blind separation of underdetermined instantaneous mixtures of independent signals >> is addressed through a [[ method ]] relying on nonstationarity of the original signals .",
+      "truth": "USED-FOR",
+      "pred": "USED-FOR"
+    },
+    {
+      "index": 133,
+      "text": "We fit each incomplete scan using << template fitting techniques >> with a generic [[ human template ]] , and register all scans to every pose using global consistency constraints .",
+      "truth": "USED-FOR",
+      "pred": "CONJUNCTION"
+    },
+    {
+      "index": 134,
+      "text": "In this paper , we present SPoT , a sentence planner , and a new [[ methodology ]] for automatically training << SPoT >> on the basis of feedback provided by human judges .",
+      "truth": "USED-FOR",
+      "pred": "USED-FOR"
+    },
+    {
+      "index": 135,
+      "text": "The submitted << model >> yields 79.1 % [[ macro-average F1 performance ]] , for the joint task , 86.9 % syntactic dependencies LAS and 71.0 % semantic dependencies F1 .",
+      "truth": "EVALUATE-FOR",
+      "pred": "EVALUATE-FOR"
+    },
+    {
+      "index": 136,
+      "text": "The demonstrator embodies an interesting combination of [[ hand-built , symbolic resources ]] and << stochastic processes >> .",
+      "truth": "CONJUNCTION",
+      "pred": "CONJUNCTION"
+    },
+    {
+      "index": 137,
+      "text": "The << board >> plugs directly into the VME bus of the SUN4 , which controls the system and contains the natural language system and [[ application back end ]] .",
+      "truth": "PART-OF",
+      "pred": "PART-OF"
+    },
+    {
+      "index": 138,
+      "text": "By extensive experiments , we show that our [[ learned representation ]] can significantly boost several video recognition tasks -LRB- retrieval , classification , and highlight detection -RRB- over traditional << video representations >> .",
+      "truth": "COMPARE",
+      "pred": "COMPARE"
+    },
+    {
+      "index": 139,
+      "text": "However , our experience with TACITUS ; especially in the MUC-3 evaluation , has shown that principled [[ techniques ]] for << syntactic and pragmatic analysis >> can be bolstered with methods for achieving robustness .",
+      "truth": "USED-FOR",
+      "pred": "USED-FOR"
+    }
+  ]
+}

@@ -5,7 +5,12 @@ from typing import Optional
 
 from nltk.inference import ResolutionProver
 from langchain_core.language_models.chat_models import BaseChatModel
-from owlready2 import sync_reasoner_pellet, World, Thing
+from owlready2 import (
+    sync_reasoner_pellet,
+    World,
+    Thing,
+    OwlReadyInconsistentOntologyError,
+)
 
 from .model import (
     TermExtractionResult,
@@ -20,6 +25,9 @@ from .registry import get_graph
 from .abox_builder import ABoxBuilder
 
 logger = getLogger(__name__)
+
+
+INCONSISTENT_COUNT = 0
 
 
 @cache
@@ -119,19 +127,47 @@ def evaluate(
                     prop_name = mapping["property"].split("#")[-1]
                     getattr(subj, prop_name).append(obj)
 
-        sync_reasoner_pellet(world, infer_property_values=True)
+        prediction = None
+        try:
+            sync_reasoner_pellet(world, infer_property_values=True)
+            inconsistent = False
+        except OwlReadyInconsistentOntologyError:
+            # contradictory assertions (e.g. two disjoint relation classes)
+            inconsistent = True
+            global INCONSISTENT_COUNT
+            INCONSISTENT_COUNT += 1
+            logger.info("reasoner flagged an inconsistent ABox")
 
-        target_class = world[meta.target_class]
         target_ind = individuals.get(meta.target_term)
-        is_satisfied = bool(
-            target_ind and target_class and target_class in target_ind.is_a
-        )
+
+        if meta.output_classes:
+            prediction = "NONE"
+            if target_ind and not inconsistent:
+                member_iris = [
+                    c.iri for c in target_ind.INDIRECT_is_a if hasattr(c, "iri")
+                ]
+                matched = [
+                    lbl
+                    for uri, lbl in meta.output_classes.items()
+                    if uri in member_iris
+                ]
+                if matched:
+                    prediction = matched[0]
+            is_satisfied = prediction != "NONE"
+        else:
+            target_class = world[meta.target_class] if meta.target_class else None
+            is_satisfied = bool(
+                target_ind
+                and target_class
+                and not inconsistent
+                and target_class in target_ind.is_a
+            )
 
         inferred_classes = {}
         for term_name, ind in individuals.items():
             if ind:
                 inferred_classes[term_name] = [
-                    str(c.iri) for c in ind.is_a if hasattr(c, "iri")
+                    str(c.iri) for c in ind.INDIRECT_is_a if hasattr(c, "iri")
                 ]
 
     if abox_builder and case_id:
@@ -149,4 +185,5 @@ def evaluate(
         is_satisfied=is_satisfied,
         terms=terms,
         predicates=predicates,
+        prediction=prediction,
     )

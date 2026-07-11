@@ -80,6 +80,10 @@ def paired_ttest(x: np.ndarray, y: np.ndarray) -> Tuple[float, float, float, int
     return t_stat, p_val, d, df
 
 
+def fmt_p(p: float) -> str:
+    return "< 0.001" if p < 0.001 else f"= {p:.3f}"
+
+
 def get_metric_by_mode(df: pd.DataFrame, mode: str, metric: str = "F1") -> pd.DataFrame:
     subset = df[df["Mode"] == mode][["Model", "Task", metric]].copy()
     subset["Model_Task"] = subset["Model"] + "_" + subset["Task"]
@@ -118,13 +122,20 @@ def compare_conditions(
     y = data2.loc[common_idx].values
 
     t_stat, p_val, d, dof = paired_ttest(x, y)
-    mean_diff = np.mean(x) - np.mean(y)
+    w_stat, w_p = stats.wilcoxon(x, y)
+    diff = x - y
+    mean_diff = np.mean(diff)
+    ci_low, ci_high = stats.t.interval(0.95, dof, loc=mean_diff, scale=stats.sem(diff))
 
     print(f"\n{label1} vs {label2} ({metric}):")
     print(f"  {label1} mean: {np.mean(x):.1f}%")
     print(f"  {label2} mean: {np.mean(y):.1f}%")
-    print(f"  Difference: {mean_diff:+.1f} percentage points")
-    print(f"  t({dof}) = {t_stat:.2f}, p = {p_val:.3f}, Cohen's d = {d:.2f}")
+    print(
+        f"  Difference: {mean_diff:+.1f} percentage points, "
+        f"95% CI [{ci_low:+.1f}, {ci_high:+.1f}]"
+    )
+    print(f"  t({dof}) = {t_stat:.2f}, p {fmt_p(p_val)}, Cohen's d = {d:.2f}")
+    print(f"  Wilcoxon signed-rank: W = {w_stat:.1f}, p {fmt_p(w_p)}")
     print(f"  N comparisons: {len(common_idx)}")
 
     return t_stat, p_val, d, mean_diff
@@ -151,7 +162,10 @@ def task_level_analysis(df: pd.DataFrame, mode1: str, mode2: str):
 
         task_name = TASK_MAPPING.get(task, task)
         print(f"  {task_name}:")
-        print(f"    Δ F1: {mean_diff:+.1f}pp, p = {p_val:.3f}")
+        print(
+            f"    Δ F1: {mean_diff:+.1f}pp, "
+            f"t({n_total - 1}) = {t_stat:.2f}, p {fmt_p(p_val)}"
+        )
         print(
             f"    {MODE_MAPPING.get(mode1, mode1)} > {MODE_MAPPING.get(mode2, mode2)}: {n_improved}/{n_total} models"
         )
@@ -172,7 +186,7 @@ def task_level_analysis(df: pd.DataFrame, mode1: str, mode2: str):
 def compute_aggregate_metrics(df: pd.DataFrame):
     print_separator("AGGREGATE METRICS")
 
-    modes = ["few-shot", "cot", "sd-no-comp", "sd", "sd-direct-no-comp"]
+    modes = ["few-shot", "cot", "sd-no-comp", "sd", "sd-direct-no-comp", "sd-direct"]
 
     print("\nMethod       | Acc.   | Prec.  | Recall | F1")
     print("-" * 50)
@@ -279,14 +293,14 @@ def main():
         sd_data = df[(df["Model"] == model) & (df["Mode"] == "sd-no-comp")]["F1"].mean()
         fs_data = df[(df["Model"] == model) & (df["Mode"] == "few-shot")]["F1"].mean()
         diff = sd_data - fs_data
-        model_improvements.append((MODEL_MAPPING.get(model, model), diff))
+        model_improvements.append((MODEL_MAPPING.get(model, model), diff, sd_data))
 
     model_improvements.sort(key=lambda x: x[1], reverse=True)
 
-    for model, diff in model_improvements:
-        print(f"  {model:20}: {diff:+.1f}pp")
+    for model, diff, sd_avg in model_improvements:
+        print(f"  {model:20}: {diff:+.1f}pp (SD avg: {sd_avg:.1f}%)")
 
-    n_positive = sum(1 for _, d in model_improvements if d > 0)
+    n_positive = sum(1 for _, d, _ in model_improvements if d > 0)
     print(
         f"\n  Total: {n_positive}/{len(model_improvements)} models showed improvement"
     )
