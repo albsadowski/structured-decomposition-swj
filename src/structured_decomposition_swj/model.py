@@ -25,10 +25,11 @@ class Task(BaseModel):
 
 
 class OntologyMetadata(BaseModel):
-    target_class: str
+    target_class: str | None = None
     target_term: str
     term_class_map: dict[str, str | None]
     predicate_map: dict[str, dict]
+    output_classes: dict[str, str] = {}
 
 
 class TermMention(BaseModel):
@@ -57,3 +58,4 @@ class EvaluationResult(BaseModel):
     is_satisfied: bool
     terms: list[TermMention]
     predicates: list[PredicateMention]
+    prediction: str | None = None

@@ -2050,6 +2050,7 @@ dependencies = [
     { name = "rdflib" },
     { name = "ruff" },
     { name = "scikit-learn" },
+    { name = "scipy" },
     { name = "tqdm" },
 ]
 
@@ -2071,6 +2072,7 @@ requires-dist = [
     { name = "rdflib", specifier = ">=7.5.0" },
     { name = "ruff", specifier = ">=0.14.10" },
     { name = "scikit-learn", specifier = ">=1.6.1" },
+    { name = "scipy", specifier = ">=1.15.0" },
     { name = "tqdm", specifier = ">=4.67.1" },
 ]
 

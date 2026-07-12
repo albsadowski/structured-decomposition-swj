@@ -1,0 +1,126 @@
+@prefix : <http://example.org/scierc-relation#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix sd: <http://example.org/structured-decomposition#> .
+
+:SciercRelationOntology a owl:Ontology ;
+    rdfs:comment "SciERC multi-class relation ontology demonstrating OWL 2 expressivity" .
+
+:SciercRelationTask a sd:Task ;
+    sd:domain "science" ;
+    sd:subdomain "NLP_AI_research" ;
+    sd:taskName "scierc_relation" ;
+    sd:persona "research assistant labelling semantic relations between scientific entities" ;
+    sd:question "Identify the single semantic relation that holds from [[arg1]] to <<arg2>>." ;
+    sd:domainKnowledge """The first entity (arg1) is wrapped in [[ ]]; the second (arg2) in << >>. Relations are directed arg1 -> arg2. Assert EXACTLY ONE relation, the single best match.
+
+- UsedFor: arg1 is used for / applied to / enables / is a method or material for arg2 (arg1 = means, arg2 = goal/task).
+- EvaluateFor: arg1 is a metric, benchmark, or dataset used to evaluate arg2.
+- PartOf: arg1 is a component or part of arg2.
+- FeatureOf: arg1 is a property, attribute, or characteristic of arg2.
+- HyponymOf: arg1 is a type / kind / instance of arg2 (taxonomic).
+- Compare: arg1 and arg2 are compared or contrasted (symmetric).
+- Conjunction: arg1 and arg2 are listed together, combined, or coordinate in the same role (symmetric).""" ;
+    sd:targetTerm "e1" ;
+    sd:outputClass :out_UsedFor, :out_EvaluateFor, :out_PartOf, :out_FeatureOf,
+                   :out_HyponymOf, :out_Compare, :out_Conjunction .
+
+:out_UsedFor     a sd:OutputClass ; sd:mapsToClass :UsedFor     ; sd:classLabel "USED-FOR" .
+:out_EvaluateFor a sd:OutputClass ; sd:mapsToClass :EvaluateFor ; sd:classLabel "EVALUATE-FOR" .
+:out_PartOf      a sd:OutputClass ; sd:mapsToClass :PartOf      ; sd:classLabel "PART-OF" .
+:out_FeatureOf   a sd:OutputClass ; sd:mapsToClass :FeatureOf   ; sd:classLabel "FEATURE-OF" .
+:out_HyponymOf   a sd:OutputClass ; sd:mapsToClass :HyponymOf   ; sd:classLabel "HYPONYM-OF" .
+:out_Compare     a sd:OutputClass ; sd:mapsToClass :Compare     ; sd:classLabel "COMPARE" .
+:out_Conjunction a sd:OutputClass ; sd:mapsToClass :Conjunction ; sd:classLabel "CONJUNCTION" .
+
+:entity_e1 a sd:EntitySpec ;
+    sd:entityName "e1" ;
+    sd:entityDescription "The first entity, wrapped in [[ double brackets ]]. Extract the exact text between [[ and ]]." ;
+    sd:mapsToClass :ScientificEntity .
+
+:entity_e2 a sd:EntitySpec ;
+    sd:entityName "e2" ;
+    sd:entityDescription "The second entity, wrapped in << angle brackets >>. Extract the exact text between << and >>." ;
+    sd:mapsToClass :ScientificEntity .
+
+:assert_UsedFor a sd:AssertionSpec ;
+    sd:assertionName "UsedFor" ; sd:assertionEntities "e1, e2" ;
+    sd:assertionDescription "arg1 is used for / applied to / enables arg2 (arg1 = means, arg2 = goal/task)." ;
+    sd:mapsToProperty :usedFor .
+
+:assert_EvaluateFor a sd:AssertionSpec ;
+    sd:assertionName "EvaluateFor" ; sd:assertionEntities "e1, e2" ;
+    sd:assertionDescription "arg1 is a metric, benchmark, or dataset used to evaluate arg2." ;
+    sd:mapsToProperty :evaluateFor .
+
+:assert_PartOf a sd:AssertionSpec ;
+    sd:assertionName "PartOf" ; sd:assertionEntities "e1, e2" ;
+    sd:assertionDescription "arg1 is a component or part of arg2." ;
+    sd:mapsToProperty :partOf .
+
+:assert_FeatureOf a sd:AssertionSpec ;
+    sd:assertionName "FeatureOf" ; sd:assertionEntities "e1, e2" ;
+    sd:assertionDescription "arg1 is a property, attribute, or characteristic of arg2." ;
+    sd:mapsToProperty :featureOf .
+
+:assert_HyponymOf a sd:AssertionSpec ;
+    sd:assertionName "HyponymOf" ; sd:assertionEntities "e1, e2" ;
+    sd:assertionDescription "arg1 is a type, kind, or instance of arg2 (taxonomic)." ;
+    sd:mapsToProperty :hyponymOf .
+
+:assert_Compare a sd:AssertionSpec ;
+    sd:assertionName "Compare" ; sd:assertionEntities "e1, e2" ;
+    sd:assertionDescription "arg1 and arg2 are compared or contrasted (symmetric)." ;
+    sd:mapsToProperty :comparedWith .
+
+:assert_Conjunction a sd:AssertionSpec ;
+    sd:assertionName "Conjunction" ; sd:assertionEntities "e1, e2" ;
+    sd:assertionDescription "arg1 and arg2 are listed together, combined, or coordinate in the same role (symmetric)." ;
+    sd:mapsToProperty :conjoinedWith .
+
+:ScientificEntity a owl:Class ;
+    rdfs:comment "A scientific entity (method, task, material, metric, term, ...)." .
+
+:Rel a owl:Class ; rdfs:comment "Any scientific relation (read on the subject entity)." .
+:DirectedRel  rdfs:subClassOf :Rel ; a owl:Class .
+:SymmetricRel rdfs:subClassOf :Rel ; a owl:Class .
+:UsageRel         rdfs:subClassOf :DirectedRel ; a owl:Class .
+:CompositionalRel rdfs:subClassOf :DirectedRel ; a owl:Class .
+:TaxonomicRel     rdfs:subClassOf :DirectedRel ; a owl:Class .
+
+:UsedFor a owl:Class ; rdfs:subClassOf :UsageRel ;
+    owl:equivalentClass [ a owl:Restriction ; owl:onProperty :usedFor ; owl:someValuesFrom :ScientificEntity ] .
+:EvaluateFor a owl:Class ; rdfs:subClassOf :UsageRel ;
+    owl:equivalentClass [ a owl:Restriction ; owl:onProperty :evaluateFor ; owl:someValuesFrom :ScientificEntity ] .
+:PartOf a owl:Class ; rdfs:subClassOf :CompositionalRel ;
+    owl:equivalentClass [ a owl:Restriction ; owl:onProperty :partOf ; owl:someValuesFrom :ScientificEntity ] .
+:FeatureOf a owl:Class ; rdfs:subClassOf :CompositionalRel ;
+    owl:equivalentClass [ a owl:Restriction ; owl:onProperty :featureOf ; owl:someValuesFrom :ScientificEntity ] .
+:HyponymOf a owl:Class ; rdfs:subClassOf :TaxonomicRel ;
+    owl:equivalentClass [ a owl:Restriction ; owl:onProperty :hyponymOf ; owl:someValuesFrom :ScientificEntity ] .
+:Compare a owl:Class ; rdfs:subClassOf :SymmetricRel ;
+    owl:equivalentClass [ a owl:Restriction ; owl:onProperty :comparedWith ; owl:someValuesFrom :ScientificEntity ] .
+:Conjunction a owl:Class ; rdfs:subClassOf :SymmetricRel ;
+    owl:equivalentClass [ a owl:Restriction ; owl:onProperty :conjoinedWith ; owl:someValuesFrom :ScientificEntity ] .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( :UsedFor :EvaluateFor :PartOf :FeatureOf :HyponymOf :Compare :Conjunction ) .
+
+:usedFor a owl:ObjectProperty ; rdfs:domain :ScientificEntity ; rdfs:range :ScientificEntity ;
+    owl:propertyChainAxiom ( :usedFor :hyponymOf ) ;
+    rdfs:comment "arg1 is used for arg2." .
+:evaluateFor a owl:ObjectProperty ; rdfs:domain :ScientificEntity ; rdfs:range :ScientificEntity .
+:featureOf   a owl:ObjectProperty ; rdfs:domain :ScientificEntity ; rdfs:range :ScientificEntity .
+
+:partOf    a owl:ObjectProperty, owl:TransitiveProperty ; rdfs:domain :ScientificEntity ; rdfs:range :ScientificEntity .
+:hyponymOf a owl:ObjectProperty, owl:TransitiveProperty ; rdfs:domain :ScientificEntity ; rdfs:range :ScientificEntity .
+
+:comparedWith  a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:domain :ScientificEntity ; rdfs:range :ScientificEntity .
+:conjoinedWith a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:domain :ScientificEntity ; rdfs:range :ScientificEntity .
+
+:hyponymOf     rdfs:subPropertyOf skos:broader .
+:comparedWith  rdfs:subPropertyOf skos:related .
+:conjoinedWith rdfs:subPropertyOf skos:related .

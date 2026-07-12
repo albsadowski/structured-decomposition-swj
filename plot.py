@@ -140,6 +140,20 @@ def create_improvement_chart():
             linewidth=0.3,
         )
 
+        # +/- marker so direction survives grayscale print (reviewer request)
+        sign = "+" if improvements[i] > 0 else "−"
+        ax.text(
+            max(baseline_vals[i], sd_vals[i]) + 0.018,
+            y_positions[i],
+            sign,
+            color=color,
+            fontsize=7,
+            fontweight="bold",
+            ha="left",
+            va="center",
+            zorder=3,
+        )
+
     task_boundaries = [10.5, 21.5]
     for boundary in task_boundaries:
         ax.axhline(y=boundary, color="gray", linestyle="-", linewidth=0.5, alpha=0.3)
@@ -204,8 +218,8 @@ def create_improvement_chart():
             markeredgecolor="black",
             markeredgewidth=0.3,
         ),
-        plt.Line2D([0], [0], color="#2ca02c", label="Improvement", linewidth=1.5),
-        plt.Line2D([0], [0], color="#d62728", label="Regression", linewidth=1.5),
+        plt.Line2D([0], [0], color="#2ca02c", label="Improvement (+)", linewidth=1.5),
+        plt.Line2D([0], [0], color="#d62728", label="Regression (−)", linewidth=1.5),
     ]
     ax.legend(
         handles=legend_elements,

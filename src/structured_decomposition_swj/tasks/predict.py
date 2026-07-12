@@ -31,17 +31,29 @@ def as_bool(res) -> bool:
     return False
 
 
+def parse_label(content, labels: list[str]) -> str:
+    if not isinstance(content, str):
+        return "NONE"
+    up = content.upper()
+    best, best_pos = "NONE", -1
+    for lab in labels:
+        pos = up.rfind(lab.upper())
+        if pos > best_pos:
+            best, best_pos = lab, pos
+    return best
+
+
 def predict_sd(
     llm: BaseChatModel,
     task: Task,
     input: str,
     debug: bool,
     **kwargs,
-) -> bool:
+) -> bool | str:
     res = evaluate(llm, task, input, **kwargs)
     if debug:
         logging.info(f"res: {res}")
-    return res.is_satisfied
+    return res.prediction if res.prediction is not None else res.is_satisfied
 
 
 def predict_few_shot(
@@ -52,7 +64,15 @@ def predict_few_shot(
     debug: bool,
     cot: bool = False,
     **kwargs,
-) -> bool:
+) -> bool | str:
+    labels = sorted(str(a) for a in train_df["answer"].unique())
+    is_multiclass = not set(labels) <= {"Yes", "No"}
+    response_instruction = (
+        f"Respond with exactly one of: {', '.join(labels)}."
+        if is_multiclass
+        else "Respond with a simple Yes or No."
+    )
+
     fs_prompt = FewShotChatMessagePromptTemplate(
         examples=[
             {
@@ -79,7 +99,7 @@ You're a {persona}.
 
 {domain_knowledge}
 
-Respond with a simple Yes or No.
+{response_instruction}
 """,
                 ),
                 fs_prompt,
@@ -98,11 +118,12 @@ Respond with a simple Yes or No.
             "question": task.question,
             "domain_knowledge": task.domain_knowledge,
             "persona": task.persona,
+            "response_instruction": response_instruction,
         }
     )
     if debug:
         logging.info(f"res: {res.content}")
-    return as_bool(res.content)
+    return parse_label(res.content, labels) if is_multiclass else as_bool(res.content)
 
 
 def predict_sd_direct(

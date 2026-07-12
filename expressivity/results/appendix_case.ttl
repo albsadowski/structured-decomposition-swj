@@ -1,0 +1,31 @@
+@prefix : <http://example.org/hearsay#> .
+@prefix inst: <http://example.org/hearsay#instances/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+inst:hearsay_appendix_s a :Statement,
+        owl:Thing ;
+    rdfs:label "Mark nodded" ;
+    :belongsToCase inst:hearsay_appendix ;
+    :confidence 9.5e-01 ;
+    :hasAssertion inst:hearsay_appendix_a ;
+    :introducedForLegalIssue inst:hearsay_appendix_l ;
+    :provesTruthOfAssertion inst:hearsay_appendix_l .
+
+inst:hearsay_appendix_a a :Assertion,
+        owl:Thing ;
+    rdfs:label "it was him who vandalized Emily's garage" ;
+    :belongsToCase inst:hearsay_appendix ;
+    :confidence 9e-01 .
+
+inst:hearsay_appendix_l a :LegalIssue,
+        owl:Thing ;
+    rdfs:label "if it was him who vandalized Emily's garage" ;
+    :belongsToCase inst:hearsay_appendix ;
+    :confidence 9.5e-01 .
+
+inst:hearsay_appendix a :TestCase ;
+    :hasSatisfied false ;
+    rdfs:comment "During the trial, Mark nodded when asked if it was him who vandalized Emily's garage." .
+

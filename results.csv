@@ -71,10 +71,10 @@ kimi-k2,eligibility_nli,sd,83%,83%,83%,83%
 kimi-k2,eligibility_nli,sd-no-comp,81.9%,81.2%,83%,82.1%
 kimi-k2,eligibility_nli,sd-direct,76.6%,85.7%,63.8%,73.2%
 kimi-k2,eligibility_nli,sd-direct-no-comp,74.5%,81.1%,63.8%,71.4%
-claude-haiku,hearsay,few-shot,77.7%,73.8%,75.6%,74.4%
+claude-haiku,hearsay,few-shot,77.7%,73.8%,75.6%,74.7%
 claude-haiku,hearsay,cot,75.5%,64.1%,100%,78.1%
 claude-haiku,hearsay,sd,69.1%,59.1%,95.1%,72.9%
-claude-haiku,hearsay,sd-no-comp,59.6%,51.9%,100%,58.3%
+claude-haiku,hearsay,sd-no-comp,59.6%,51.9%,100%,68.3%
 claude-haiku,hearsay,sd-direct,69.1%,60%,87.8%,71.3%
 claude-haiku,hearsay,sd-direct-no-comp,62.8%,54.2%,95.1%,69%
 claude-haiku,method_application,few-shot,79.8%,78.9%,86.5%,82.6%
@@ -186,7 +186,7 @@ o3,hearsay,sd-no-comp,85.1%,76.5%,95.1%,84.8%
 o3,hearsay,sd-direct,86.2%,80.4%,90.2%,85.1%
 o3,hearsay,sd-direct-no-comp,89.4%,83%,95.1%,88.6%
 o3,method_application,few-shot,91.5%,97.8%,86.5%,91.8%
-o3,method_application,cot,90.4%,100%,92.7%,90.5%
+o3,method_application,cot,90.4%,100%,82.7%,90.5%
 o3,method_application,sd,94.7%,94.3%,96.2%,95.2%
 o3,method_application,sd-no-comp,92.6%,92.5%,94.2%,93.3%
 o3,method_application,sd-direct,94.7%,96.1%,94.2%,95.1%
